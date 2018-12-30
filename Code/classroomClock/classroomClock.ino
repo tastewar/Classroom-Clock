@@ -23,7 +23,7 @@
 #include <Wire.h>
 #include <SPI.h>
 #include "RTClib.h"               // https://github.com/adafruit/RTClib
-#include <RTC_DS1307.h>
+//#include <RTC_DS1307.h>
 #include <avr/power.h>
 #include <Adafruit_NeoPixel.h>    // https://github.com/adafruit/Adafruit_NeoPixel
 
@@ -277,7 +277,7 @@ boolean isSchoolDay() {
 
 boolean isWeekend() {
   // 0 = Sunday, 1 = Monday, ...., 6 = Saturday
-  if (now.dayOfWeek() == 0 || now.dayOfWeek() == 6) return true;
+  if (now.dayOfTheWeek() == 0 || now.dayOfTheWeek() == 6) return true;
   return false;
 }
 

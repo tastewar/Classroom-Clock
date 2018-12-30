@@ -88,23 +88,23 @@ uint8_t currentBlock = D_BLOCK;
 // this number should match the number of entries in schedule[]
 const uint8_t numTimeBlocks = 9;
 
-uint8_t schedule[numTimeBlocks][5] = {
+const PROGMEM uint8_t schedule[numTimeBlocks][5] = {
   // use 24 hour clock numbers even though this clock is a 12 hour clock
   // {starting hour, start min, end hour, end min}
-  {8, 0, 9, 0, ACADEMIC},       // 0 - Period 1: 8 - 9
-  {9, 3, 9, 48, ACADEMIC},      // 1 - Period 2: 9:03 - 9:48
-  {9, 48, 10, 15, ASSEMBLY},    // 2 - Assembly: 9:48 - 10:18
-  {10, 18, 11, 3, ACADEMIC},    // 3 - Period 3: 10:18 - 11:03
-  {11, 6, 11, 51, ACADEMIC},    // 4 - Period 4: 11:06 - 11:51
-  {11, 54, 12, 39, ACADEMIC},   // 5 - Period 5: 11:54 - 12:39
-  {12, 39, 13, 24, LUNCH},      // 6 - Lunch: 12:39 - 1:24
-  {13, 27, 14, 12, ACADEMIC},   // 7 - Period 6: 1:27 - 2:12
-  {14, 15, 15, 0, ACADEMIC}     // 8 - Period 7: 2:15 - 3:00
+  {8, 0, 8, 50, ACADEMIC},       // 0 - Period 1:
+  {8, 52, 9, 40, ACADEMIC},      // 1 - Period 2:
+  {9, 42, 9, 52, ASSEMBLY},    // 2 - Aspire:
+  {9, 54, 10, 42, ACADEMIC},    // 3 - Period 3:
+  {10, 44, 11, 32, ACADEMIC},    // 4 - Period 4:
+  {11, 34, 12, 23, ACADEMIC},    // 5 - Period 5: (2/3)
+  {12, 25, 12, 46, LUNCH},      // 6 - Lunch: 
+  {12, 48, 13, 36, ACADEMIC},   // 7 - Period 6:
+  {13, 38, 14, 26, ACADEMIC}     // 8 - Period 7:
 };
 
-// this number should match the number of entries in vacations[]
-const uint8_t numVacations = 3;
-uint8_t vacations[numVacations][3] = {
+// this number should match the number of entries in holidays[]
+const uint8_t numHolidays = 3;
+const PROGMEM uint8_t holidays[numHolidays][3] = {
   {2016, 1, 10},
   {2016, 2, 20},
   {2016, 3, 30}
@@ -271,7 +271,7 @@ boolean isEndFlash() {
 
 boolean isSchoolDay() {
   if (isWeekend()) return false;
-  else if (isVacation()) return false;
+  else if (isHoliday()) return false;
   return true;
 }
 
@@ -281,9 +281,9 @@ boolean isWeekend() {
   return false;
 }
 
-boolean isVacation() {
-  for (int i = 0; i < numVacations; i++) {
-    if(now.year() == vacations[i][0] && now.month() == vacations[i][1] && now.day() == vacations[i][2]) {
+boolean isHoliday() {
+  for (int i = 0; i < numHolidays; i++) {
+    if(now.year() == holidays[i][0] && now.month() == holidays[i][1] && now.day() == holidays[i][2]) {
       return true;
     }
   }

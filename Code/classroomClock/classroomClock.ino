@@ -69,6 +69,80 @@ const PROGMEM uint8_t letters[] = {
 
 /////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////
+// COLOR CONSTANTS
+/////////////////////////////////////////////////////////
+#define RED          0x00FF0000
+#define GREEN        0x0000FF00
+#define BLUE         0x000000FF
+#define PURPLE       0x00800080
+#define YELLOW       0x00FFFF00
+#define ORANGE       0x00FFA500
+#define LUNCH        ORANGE
+#define ASPIRE       ORANGE
+#define OUTOFCLUSTER ORANGE
+
+
+/////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
+// SCHEDULE RELATED STRUCTURE DEFINITIONS
+/////////////////////////////////////////////////////////
+typedef struct _Period
+{
+  uint8_t  begH;
+  uint8_t  begM;
+  uint8_t  endH;
+  uint8_t  endM;
+  uint32_t aCol;
+  uint32_t bCol;
+  uint32_t cCol;
+  uint32_t dCol;
+} Period;
+
+#define MAX_PERIODS 9
+typedef struct _BellSched
+{
+  uint8_t NumPeriods;
+  Period Periods[MAX_PERIODS];
+} BellSched;
+
+typedef struct _SingleDay
+{
+  //bool        valid;
+  uint8_t     Y;
+  uint8_t     M;
+  uint8_t     D;
+  BellSched*  dayType;
+  uint8_t     dayLetter;
+} SingleDay;
+
+/*#define MAX_DAYS  180
+typedef struct _Calendar
+{
+  SingleDay Days[MAX_DAYS];
+} Calendar;*/
+
+const PROGMEM BellSched NormalDay[]=
+{
+  9,
+  {8,0,8,50,OUTOFCLUSTER,RED,OUTOFCLUSTER,YELLOW},
+  {8,52,9,40,RED,YELLOW,YELLOW,OUTOFCLUSTER},
+  {9,42,9,52,ASPIRE,ASPIRE,ASPIRE,ASPIRE},
+  {9,54,10,42,YELLOW,OUTOFCLUSTER,RED,RED},
+  {10,44,11,32,GREEN,OUTOFCLUSTER,BLUE,GREEN},
+  {11,34,12,23,OUTOFCLUSTER,BLUE,GREEN,PURPLE},
+  {12,25,12,46,LUNCH,LUNCH,LUNCH,LUNCH},
+  {12,48,13,36,BLUE,PURPLE,PURPLE,OUTOFCLUSTER},
+  {13,38,14,26,PURPLE,GREEN,OUTOFCLUSTER,BLUE},
+};
+
+const PROGMEM SingleDay TheCalendar[]=
+{
+  {2018,9,4,NormalDay,'A'},
+  {2018,9,5,NormalDay,'B'},
+};
+
+/////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
 // CUSTOMIZE THIS STUFF
 /////////////////////////////////////////////////////////
 
@@ -658,17 +732,21 @@ void displayMinute(uint8_t m, uint32_t col)
 
 void displayLetter(uint8_t letter, uint32_t col)
 {
-//  if (letter < 8) {
-//    for (int i = 0; i < 7; i++) {
-//      if (letters[letter] & (1 << 7 - i)) strip.setPixelColor(i, col);
-//      else strip.setPixelColor(i, 0);
-//    }
-//  }
-//  else {
-//    for (int i = 0; i < 7; i++) {
-//      strip.setPixelColor(i, 0);
-//    }
-//  }
+  if (letter < 8)
+  {
+    for (int i = 0; i < 7; i++)
+    {
+      if (letters[letter] & (1 << 7 - i)) strip.setPixelColor(i, col);
+      else strip.setPixelColor(i, 0);
+    }
+  }
+  else
+  {
+    for (int i = 0; i < 7; i++)
+    {
+      strip.setPixelColor(i, 0);
+    }
+  }
 }
 
 // Input a value 0 to 255 to get a color value.

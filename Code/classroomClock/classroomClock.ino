@@ -23,7 +23,6 @@
 #include <Wire.h>
 #include <SPI.h>
 #include "RTClib.h"               // https://github.com/adafruit/RTClib
-#include <avr/power.h>
 #include <Adafruit_NeoPixel.h>    // https://github.com/adafruit/Adafruit_NeoPixel
 
 #define NEOPIXEL_PIN 3
@@ -32,6 +31,8 @@
 #define TODAY_IS_A_WEEKEND 254
 
 //#define DEBUG
+//#define DEBUG2
+//#define DEBUG3
 
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(NUM_PIXELS, NEOPIXEL_PIN, NEO_GRB + NEO_KHZ800);
 RTC_DS1307 RTC;
@@ -194,194 +195,44 @@ const PROGMEM BellSched ER1300=
 // days not present are either weekend days or holidays
 const PROGMEM SingleDay TheCalendar[]=
 {
-  {2018,9,4,&NormalDay},
-  {2018,9,5,&NormalDay},
-  {2018,9,6,&NormalDay},
-  {2018,9,7,&NormalDay},
-  {2018,9,11,&NormalDay},
-  {2018,9,12,&NormalDay},
-  {2018,9,13,&NormalDay},
-  {2018,9,14,&NormalDay},
-  {2018,9,17,&NormalDay},
-  {2018,9,18,&ER1300},
-  {2018,9,20,&NormalDay},
-  {2018,9,21,&NormalDay},
-  {2018,9,24,&NormalDay},
-  {2018,9,25,&NormalDay},
-  {2018,9,26,&NormalDay},
-  {2018,9,27,&NormalDay},
-  {2018,9,28,&NormalDay},
-  {2018,10,1,&NormalDay},
-  {2018,10,2,&NormalDay},
-  {2018,10,3,&NormalDay},
-  {2018,10,4,&NormalDay},
-  {2018,10,5,&NormalDay},
-  {2018,10,9,&NormalDay},
-  {2018,10,10,&NormalDay},
-  {2018,10,11,&NormalDay},
-  {2018,10,12,&NormalDay},
-  {2018,10,15,&NormalDay},
-  {2018,10,16,&NormalDay},
-  {2018,10,17,&NormalDay},
-  {2018,10,18,&NormalDay},
-  {2018,10,19,&NormalDay},
-  {2018,10,22,&NormalDay},
-  {2018,10,23,&ER1300},
-  {2018,10,24,&NormalDay},
-  {2018,10,25,&NormalDay},
-  {2018,10,26,&NormalDay},
-  {2018,10,29,&NormalDay},
-  {2018,10,30,&NormalDay},
-  {2018,10,31,&NormalDay},
-  {2018,11,1,&ER1115},
-  {2018,11,2,&NormalDay},
-  {2018,11,5,&NormalDay},
-  {2018,11,7,&NormalDay},
-  {2018,11,8,&NormalDay},
-  {2018,11,9,&NormalDay},
-  {2018,11,13,&NormalDay},
-  {2018,11,14,&NormalDay},
-  {2018,11,15,&NormalDay},
-  {2018,11,16,&NormalDay},
-  {2018,11,19,&NormalDay},
-  {2018,11,20,&NormalDay},
-  {2018,11,21,&ER1200},
-  {2018,11,26,&NormalDay},
-  {2018,11,27,&NormalDay},
-  {2018,11,28,&NormalDay},
-  {2018,11,29,&NormalDay},
-  {2018,11,30,&NormalDay},
-  {2018,12,3,&NormalDay},
-  {2018,12,4,&NormalDay},
-  {2018,12,5,&NormalDay},
-  {2018,12,6,&NormalDay},
-  {2018,12,7,&NormalDay},
-  {2018,12,10,&NormalDay},
-  {2018,12,11,&NormalDay},
-  {2018,12,12,&NormalDay},
-  {2018,12,13,&NormalDay},
-  {2018,12,14,&NormalDay},
-  {2018,12,17,&NormalDay},
-  {2018,12,18,&ER1300},
-  {2018,12,19,&NormalDay},
-  {2018,12,20,&NormalDay},
-  {2018,12,21,&ER1200},
-  {2019,1,2,&NormalDay},
-  {2019,1,3,&NormalDay},
-  {2019,1,4,&NormalDay},
-  {2019,1,7,&NormalDay},
-  {2019,1,8,&NormalDay},
-  {2019,1,9,&NormalDay},
-  {2019,1,10,&NormalDay},
-  {2019,1,11,&NormalDay},
-  {2019,1,14,&NormalDay},
-  {2019,1,15,&ER1115},
-  {2019,1,16,&NormalDay},
-  {2019,1,17,&NormalDay},
-  {2019,1,18,&NormalDay},
-  {2019,1,22,&NormalDay},
-  {2019,1,23,&NormalDay},
-  {2019,1,24,&NormalDay},
-  {2019,1,25,&NormalDay},
-  {2019,1,28,&NormalDay},
-  {2019,1,29,&NormalDay},
-  {2019,1,30,&NormalDay},
-  {2019,1,31,&NormalDay},
-  {2019,2,1,&NormalDay},
-  {2019,2,4,&NormalDay},
-  {2019,2,5,&NormalDay},
-  {2019,2,6,&NormalDay},
-  {2019,2,7,&NormalDay},
-  {2019,2,8,&NormalDay},
-  {2019,2,11,&NormalDay},
-  {2019,2,12,&NormalDay},
-  {2019,2,13,&NormalDay},
-  {2019,2,14,&NormalDay},
-  {2019,2,15,&NormalDay},
-  {2019,2,25,&NormalDay},
-  {2019,2,26,&ER1300},
-  {2019,2,27,&NormalDay},
-  {2019,2,28,&NormalDay},
-  {2019,3,1,&NormalDay},
-  {2019,3,4,&NormalDay},
-  {2019,3,5,&NormalDay},
-  {2019,3,6,&NormalDay},
-  {2019,3,7,&NormalDay},
-  {2019,3,8,&NormalDay},
-  {2019,3,11,&NormalDay},
-  {2019,3,12,&NormalDay},
-  {2019,3,13,&NormalDay},
-  {2019,3,14,&NormalDay},
-  {2019,3,15,&NormalDay},
-  {2019,3,18,&NormalDay},
-  {2019,3,19,&ER1300},
-  {2019,3,20,&NormalDay},
-  {2019,3,21,&NormalDay},
-  {2019,3,22,&NormalDay},
-  {2019,3,25,&NormalDay},
-  {2019,3,26,&NormalDay},
-  {2019,3,27,&NormalDay},
-  {2019,3,28,&NormalDay},
-  {2019,3,29,&NormalDay},
-  {2019,4,1,&NormalDay},
-  {2019,4,2,&NormalDay},
-  {2019,4,3,&NormalDay},
-  {2019,4,4,&NormalDay},
-  {2019,4,5,&NormalDay},
-  {2019,4,8,&NormalDay},
-  {2019,4,9,&NormalDay},
-  {2019,4,10,&NormalDay},
-  {2019,4,11,&NormalDay},
-  {2019,4,12,&NormalDay},
-  {2019,4,22,&NormalDay},
-  {2019,4,23,&ER1300},
-  {2019,4,24,&NormalDay},
-  {2019,4,25,&NormalDay},
-  {2019,4,26,&NormalDay},
-  {2019,4,29,&NormalDay},
-  {2019,4,30,&NormalDay},
-  {2019,5,1,&NormalDay},
-  {2019,5,2,&NormalDay},
-  {2019,5,3,&NormalDay},
-  {2019,5,6,&NormalDay},
-  {2019,5,7,&NormalDay},
-  {2019,5,8,&NormalDay},
-  {2019,5,9,&NormalDay},
-  {2019,5,10,&NormalDay},
-  {2019,5,13,&NormalDay},
-  {2019,5,14,&NormalDay},
-  {2019,5,15,&NormalDay},
-  {2019,5,16,&NormalDay},
-  {2019,5,17,&NormalDay},
-  {2019,5,20,&NormalDay},
-  {2019,5,21,&ER1300},
-  {2019,5,22,&NormalDay},
-  {2019,5,23,&NormalDay},
-  {2019,5,24,&NormalDay},
-  {2019,5,28,&NormalDay},
-  {2019,5,29,&NormalDay},
-  {2019,5,30,&NormalDay},
-  {2019,5,31,&NormalDay},
-  {2019,6,3,&NormalDay},
-  {2019,6,4,&NormalDay},
-  {2019,6,5,&NormalDay},
-  {2019,6,6,&NormalDay},
-  {2019,6,7,&NormalDay},
-  {2019,6,10,&NormalDay},
-  {2019,6,11,&NormalDay},
-  {2019,6,12,&NormalDay},
-  {2019,6,13,&NormalDay},
-  {2019,6,14,&NormalDay},
-  {2019,6,17,&NormalDay},
-  {2019,6,18,&NormalDay},
-  {2019,6,19,&NormalDay},
-  {2019,6,20,&NormalDay},
-  {2019,6,21,&NormalDay},
-  {2019,6,24,&NormalDay},
-  {2019,6,25,&NormalDay},
-  {2019,6,26,&NormalDay},
-  {2019,6,27,&NormalDay},
-  {2019,6,28,&NormalDay},
+  {2018,9,4,&NormalDay},  {2018,9,5,&NormalDay},  {2018,9,6,&NormalDay},  {2018,9,7,&NormalDay},  {2018,9,11,&NormalDay},
+  {2018,9,12,&NormalDay},  {2018,9,13,&NormalDay},  {2018,9,14,&NormalDay},  {2018,9,17,&NormalDay},  {2018,9,18,&ER1300},
+  {2018,9,20,&NormalDay},  {2018,9,21,&NormalDay},  {2018,9,24,&NormalDay},  {2018,9,25,&NormalDay},  {2018,9,26,&NormalDay},
+  {2018,9,27,&NormalDay},  {2018,9,28,&NormalDay},  {2018,10,1,&NormalDay},  {2018,10,2,&NormalDay},  {2018,10,3,&NormalDay},
+  {2018,10,4,&NormalDay},  {2018,10,5,&NormalDay},  {2018,10,9,&NormalDay},  {2018,10,10,&NormalDay},  {2018,10,11,&NormalDay},
+  {2018,10,12,&NormalDay},  {2018,10,15,&NormalDay},  {2018,10,16,&NormalDay},  {2018,10,17,&NormalDay},  {2018,10,18,&NormalDay},
+  {2018,10,19,&NormalDay},  {2018,10,22,&NormalDay},  {2018,10,23,&ER1300},  {2018,10,24,&NormalDay},  {2018,10,25,&NormalDay},
+  {2018,10,26,&NormalDay},  {2018,10,29,&NormalDay},  {2018,10,30,&NormalDay},  {2018,10,31,&NormalDay},  {2018,11,1,&ER1115},
+  {2018,11,2,&NormalDay},  {2018,11,5,&NormalDay},  {2018,11,7,&NormalDay},  {2018,11,8,&NormalDay},  {2018,11,9,&NormalDay},
+  {2018,11,13,&NormalDay},  {2018,11,14,&NormalDay},  {2018,11,15,&NormalDay},  {2018,11,16,&NormalDay},  {2018,11,19,&NormalDay},
+  {2018,11,20,&NormalDay},  {2018,11,21,&ER1200},  {2018,11,26,&NormalDay},  {2018,11,27,&NormalDay},  {2018,11,28,&NormalDay},
+  {2018,11,29,&NormalDay},  {2018,11,30,&NormalDay},  {2018,12,3,&NormalDay},  {2018,12,4,&NormalDay},  {2018,12,5,&NormalDay},
+  {2018,12,6,&NormalDay},  {2018,12,7,&NormalDay},  {2018,12,10,&NormalDay},  {2018,12,11,&NormalDay},  {2018,12,12,&NormalDay},
+  {2018,12,13,&NormalDay},  {2018,12,14,&NormalDay},  {2018,12,17,&NormalDay},  {2018,12,18,&ER1300},  {2018,12,19,&NormalDay},
+  {2018,12,20,&NormalDay},  {2018,12,21,&ER1200},  {2019,1,2,&NormalDay},  {2019,1,3,&NormalDay},  {2019,1,4,&NormalDay},
+  {2019,1,7,&NormalDay},  {2019,1,8,&NormalDay},  {2019,1,9,&NormalDay},  {2019,1,10,&NormalDay},  {2019,1,11,&NormalDay},
+  {2019,1,14,&NormalDay},  {2019,1,15,&ER1115},  {2019,1,16,&NormalDay},  {2019,1,17,&NormalDay},  {2019,1,18,&NormalDay},
+  {2019,1,22,&NormalDay},  {2019,1,23,&NormalDay},  {2019,1,24,&NormalDay},  {2019,1,25,&NormalDay},  {2019,1,28,&NormalDay},
+  {2019,1,29,&NormalDay},  {2019,1,30,&NormalDay},  {2019,1,31,&NormalDay},  {2019,2,1,&NormalDay},  {2019,2,4,&NormalDay},
+  {2019,2,5,&NormalDay},  {2019,2,6,&NormalDay},  {2019,2,7,&NormalDay},  {2019,2,8,&NormalDay},  {2019,2,11,&NormalDay},
+  {2019,2,12,&NormalDay},  {2019,2,13,&NormalDay},  {2019,2,14,&NormalDay},  {2019,2,15,&NormalDay},  {2019,2,25,&NormalDay},
+  {2019,2,26,&ER1300},  {2019,2,27,&NormalDay},  {2019,2,28,&NormalDay},  {2019,3,1,&NormalDay},  {2019,3,4,&NormalDay},
+  {2019,3,5,&NormalDay},  {2019,3,6,&NormalDay},  {2019,3,7,&NormalDay},  {2019,3,8,&NormalDay},  {2019,3,11,&NormalDay},
+  {2019,3,12,&NormalDay},  {2019,3,13,&NormalDay},  {2019,3,14,&NormalDay},  {2019,3,15,&NormalDay},  {2019,3,18,&NormalDay},
+  {2019,3,19,&ER1300},  {2019,3,20,&NormalDay},  {2019,3,21,&NormalDay},  {2019,3,22,&NormalDay},  {2019,3,25,&NormalDay},
+  {2019,3,26,&NormalDay},  {2019,3,27,&NormalDay},  {2019,3,28,&NormalDay},  {2019,3,29,&NormalDay},  {2019,4,1,&NormalDay},
+  {2019,4,2,&NormalDay},  {2019,4,3,&NormalDay},  {2019,4,4,&NormalDay},  {2019,4,5,&NormalDay},  {2019,4,8,&NormalDay},
+  {2019,4,9,&NormalDay},  {2019,4,10,&NormalDay},  {2019,4,11,&NormalDay},  {2019,4,12,&NormalDay},  {2019,4,22,&NormalDay},
+  {2019,4,23,&ER1300},  {2019,4,24,&NormalDay},  {2019,4,25,&NormalDay},  {2019,4,26,&NormalDay},  {2019,4,29,&NormalDay},
+  {2019,4,30,&NormalDay},  {2019,5,1,&NormalDay},  {2019,5,2,&NormalDay},  {2019,5,3,&NormalDay},  {2019,5,6,&NormalDay},
+  {2019,5,7,&NormalDay},  {2019,5,8,&NormalDay},  {2019,5,9,&NormalDay},  {2019,5,10,&NormalDay},  {2019,5,13,&NormalDay},
+  {2019,5,14,&NormalDay},  {2019,5,15,&NormalDay},  {2019,5,16,&NormalDay},  {2019,5,17,&NormalDay},  {2019,5,20,&NormalDay},
+  {2019,5,21,&ER1300},  {2019,5,22,&NormalDay},  {2019,5,23,&NormalDay},  {2019,5,24,&NormalDay},  {2019,5,28,&NormalDay},
+  {2019,5,29,&NormalDay},  {2019,5,30,&NormalDay},  {2019,5,31,&NormalDay},  {2019,6,3,&NormalDay},  {2019,6,4,&NormalDay},
+  {2019,6,5,&NormalDay},  {2019,6,6,&NormalDay},  {2019,6,7,&NormalDay},  {2019,6,10,&NormalDay},  {2019,6,11,&NormalDay},
+  {2019,6,12,&NormalDay},  {2019,6,13,&NormalDay},  {2019,6,14,&NormalDay},  {2019,6,17,&NormalDay},  {2019,6,18,&NormalDay},
+  {2019,6,19,&NormalDay},  {2019,6,20,&NormalDay},  {2019,6,21,&NormalDay},  {2019,6,24,&NormalDay},  {2019,6,25,&NormalDay},
+  {2019,6,26,&NormalDay},  {2019,6,27,&NormalDay},  {2019,6,28,&NormalDay},
 };
 
 const uint8_t DayCount = sizeof(TheCalendar)/sizeof(SingleDay);
@@ -414,9 +265,12 @@ void setup()
   */
   // initChronoDot(2016, 11, 7, 15, 59, 50);
   initChronoDot();
+  now = RTC.now();
+  DoNewDayStuff();
+  DeterminePeriod();
+  DoNewMinuteStuff();
   strip.begin();
   strip.show();
-  //delay(3000);
 }
 
 void loop()
@@ -431,6 +285,39 @@ void loop()
   displayClock();
 }
 
+void DeterminePeriod()
+{
+  BellSched *bs=CalGetDayType(Today);
+  uint8_t p,n=BSGetNumPeriods(bs);
+
+  if (isAfterTime(now.hour(), now.minute(), BSGetEndHour(bs,n), BSGetEndMin(bs,n)))
+  {
+    currentPeriod=n;
+    clockType = ctAfterSchool;
+    return;
+  }
+  else for (p=0;p<n;p++)
+  {
+    if (!isAfterTime(now.hour(), now.minute(), BSGetBegHour(bs,p), BSGetBegMin(bs,p))) break;
+  }
+  if (p==0)
+  {
+    //before the first period
+    currentPeriod=0;
+    clockType=ctBeforeSchool;
+    return;
+  }
+  else
+  {
+    currentPeriod = p-1;
+    if (isAfterTime(now.hour(), now.minute(), BSGetEndHour(bs,currentPeriod), BSGetEndMin(bs,currentPeriod)))
+    {
+      clockType = ctPassing;
+    }
+    else clockType = ctDuringClass;
+  }
+  
+}
 void DoNewDayStuff()
 {
   currentPeriod = 0;
@@ -486,7 +373,8 @@ void DoNewMinuteStuff()
           return;
         }
       }
-      if ( timeDiff(BSGetEndHour(bs,currentPeriod), BSGetEndMin(bs,currentPeriod), now.hour(), now.minute())  < countdownM )
+      uint16_t td=timeDiff(BSGetEndHour(bs,currentPeriod), BSGetEndMin(bs,currentPeriod), now.hour(), now.minute());
+      if ( td > 0 && td <= countdownM )
       {
         clockType = ctEndFlash;
       }
@@ -500,6 +388,18 @@ void DoNewMinuteStuff()
       }
     }
   }
+  #ifdef DEBUG
+  printClock();
+  Serial.print(F("Clock Type: "));
+  Serial.print(clockType);
+  Serial.print(F("\nDay Type: "));
+  Serial.print(dayType);
+  Serial.print(F("\nToday: "));
+  Serial.print(Today);
+  Serial.print(F(" Current Period: "));
+  Serial.print(currentPeriod);
+  Serial.print("\n");
+  #endif 
 }
 
 /////////////////////////////////////////////////////////
@@ -566,6 +466,13 @@ uint8_t isSchoolDay()
     uint16_t cy=CalGetYear(i);
     uint8_t cm=CalGetMonth(i);
     uint8_t cd=CalGetDay(i);
+
+    #ifdef DEBUG2
+    Serial.print(cy);
+    Serial.print(cm);
+    Serial.print(cd);
+    Serial.print(" ");
+    #endif
     
     // loop thru calendar until we've either found the current day, or gone past
     if ( cd == now.day() && cm == now.month() && cy == now.year() ) return i;
@@ -717,12 +624,31 @@ int getGradientColor(uint8_t h, uint8_t m)
   uint8_t m0 = BSGetBegMin(bs,currentPeriod);
   uint8_t h1 = BSGetEndHour(bs,currentPeriod);
   uint8_t m1 = BSGetEndMin(bs,currentPeriod);
+  //adjust end time for countdown clock
+  if (m1<countdownM)
+  {
+    m1+=60;
+    m1-=countdownM;
+    h1--;
+  }
+  else
+  {
+    m1-=countdownM;
+  }
   DateTime startTime(now.year(), now.month(), now.day(), h0, m0, 0);
   DateTime endTime(now.year(), now.month(), now.day(), h1, m1, 0);
-  #ifdef DEBUG
-  Serial.print("Gradient Clock: ");
-  Serial.print(map(now.unixtime(), startTime.unixtime(), endTime.unixtime(), 0, 100));
-  Serial.println("% through period");
+  #ifdef DEBUG3
+  {
+    static uint8_t LastPct;
+    uint8_t CurrPct=map(now.unixtime(), startTime.unixtime(), endTime.unixtime(), 0, 100);
+    if (CurrPct!=LastPct)
+    {
+      Serial.print("Gradient Clock: ");
+      Serial.print(CurrPct);
+      Serial.println("% through period");
+      LastPct = CurrPct;
+    }
+  }
   #endif
   return map(now.unixtime(), startTime.unixtime(), endTime.unixtime(), 80, 0);
 }
@@ -907,6 +833,10 @@ uint8_t getLetter()
 void printClock()
 {
   #ifdef DEBUG
+  Serial.print(now.year());
+  Serial.print(now.month());
+  Serial.print(now.day());
+  Serial.print(" ");
   Serial.print(now.hour());
   Serial.print(":");
   Serial.print(now.minute());
@@ -924,28 +854,28 @@ uint16_t CalGetYear(uint8_t i)
 {
   uint16_t offset=i*sizeof(SingleDay);
   offset += offsetof(SingleDay,Y);
-  return pgm_read_word_near(TheCalendar + offset);
+  return pgm_read_word((char*)TheCalendar + offset);
 }
 
 uint8_t CalGetMonth(uint8_t i)
 {
   uint16_t offset=i*sizeof(SingleDay);
   offset += offsetof(SingleDay,M);
-  return pgm_read_byte_near(TheCalendar + offset);
+  return pgm_read_byte((char*)TheCalendar + offset);
 }
 
 uint8_t CalGetDay(uint8_t i)
 {
   uint16_t offset=i*sizeof(SingleDay);
   offset += offsetof(SingleDay,D);
-  return pgm_read_byte_near(TheCalendar + offset);
+  return pgm_read_byte((char*)TheCalendar + offset);
 }
 
 BellSched *CalGetDayType(uint8_t i)
 {
   uint16_t offset=i*sizeof(SingleDay);
   offset += offsetof(SingleDay,dayType);
-  return pgm_read_word_near(TheCalendar + offset);
+  return pgm_read_ptr((char*)TheCalendar + offset);
 }
 
 uint8_t CalGetDayLetter(uint8_t i)
@@ -958,7 +888,7 @@ uint8_t BSGetBegHour( BellSched *BS, uint8_t P)
   uint16_t offset=P*sizeof(Period);
   offset += offsetof(Period,begH);
   offset += sizeof(uint8_t); //NumPeriods
-  return pgm_read_byte_near(BS+offset);
+  return pgm_read_byte((char*)BS+offset);
 }
 
 uint8_t BSGetBegMin( BellSched *BS, uint8_t P)
@@ -966,7 +896,7 @@ uint8_t BSGetBegMin( BellSched *BS, uint8_t P)
   uint16_t offset=P*sizeof(Period);
   offset += offsetof(Period,begM);
   offset += sizeof(uint8_t); //NumPeriods
-  return pgm_read_byte_near(BS+offset);
+  return pgm_read_byte((char*)BS+offset);
 }
 
 uint8_t BSGetEndHour( BellSched *BS, uint8_t P)
@@ -974,7 +904,7 @@ uint8_t BSGetEndHour( BellSched *BS, uint8_t P)
   uint16_t offset=P*sizeof(Period);
   offset += offsetof(Period,endH);
   offset += sizeof(uint8_t); //NumPeriods
-  return pgm_read_byte_near(BS+offset);
+  return pgm_read_byte((char*)BS+offset);
 }
 
 uint8_t BSGetEndMin( BellSched *BS, uint8_t P)
@@ -982,7 +912,7 @@ uint8_t BSGetEndMin( BellSched *BS, uint8_t P)
   uint16_t offset=P*sizeof(Period);
   offset += offsetof(Period,endM);
   offset += sizeof(uint8_t); //NumPeriods
-  return pgm_read_byte_near(BS+offset);
+  return pgm_read_byte((char*)BS+offset);
 }
 
 uint32_t BSGetACol( BellSched *BS, uint8_t P)
@@ -990,7 +920,7 @@ uint32_t BSGetACol( BellSched *BS, uint8_t P)
   uint16_t offset=P*sizeof(Period);
   offset += offsetof(Period,aCol);
   offset += sizeof(uint8_t); //NumPeriods
-  return pgm_read_dword_near(BS+offset);
+  return pgm_read_dword((char*)BS+offset);
 }
 
 uint32_t BSGetBCol( BellSched *BS, uint8_t P)
@@ -998,7 +928,7 @@ uint32_t BSGetBCol( BellSched *BS, uint8_t P)
   uint16_t offset=P*sizeof(Period);
   offset += offsetof(Period,bCol);
   offset += sizeof(uint8_t); //NumPeriods
-  return pgm_read_dword_near(BS+offset);
+  return pgm_read_dword((char*)BS+offset);
 }
 
 uint32_t BSGetCCol( BellSched *BS, uint8_t P)
@@ -1006,7 +936,7 @@ uint32_t BSGetCCol( BellSched *BS, uint8_t P)
   uint16_t offset=P*sizeof(Period);
   offset += offsetof(Period,cCol);
   offset += sizeof(uint8_t); //NumPeriods
-  return pgm_read_dword_near(BS+offset);
+  return pgm_read_dword((char*)BS+offset);
 }
 
 uint32_t BSGetDCol( BellSched *BS, uint8_t P)
@@ -1014,11 +944,11 @@ uint32_t BSGetDCol( BellSched *BS, uint8_t P)
   uint16_t offset=P*sizeof(Period);
   offset += offsetof(Period,dCol);
   offset += sizeof(uint8_t); //NumPeriods
-  return pgm_read_dword_near(BS+offset);
+  return pgm_read_dword((char*)BS+offset);
 }
 
 uint8_t BSGetNumPeriods( BellSched *BS )
 {
   uint16_t offset = offsetof(BellSched,NumPeriods);
-  return pgm_read_byte_near(BS+offset);
+  return pgm_read_byte((char*)BS+offset);
 }

@@ -28,8 +28,10 @@
 
 #define NEOPIXEL_PIN 3
 #define NUM_PIXELS 32
+#define TODAY_IS_A_HOLIDAY 255
+#define TODAY_IS_A_WEEKEND 254
 
-#define DEBUG false
+//#define DEBUG
 
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(NUM_PIXELS, NEOPIXEL_PIN, NEO_GRB + NEO_KHZ800);
 RTC_DS1307 RTC;
@@ -37,11 +39,6 @@ DateTime now;
 uint8_t currentMinute = 60;
 uint8_t currentPeriod = 0;
 uint8_t currentDay = 0;
-uint8_t lastHour = 0;
-uint8_t timeBlockIndex = 0;
-
-DateTime lastFlash;    // for countdown "flash"
-boolean flashOn = false;
 
 const /*PROGMEM*/ uint8_t numbers[] = {
   B11101110,    // 0
@@ -103,11 +100,11 @@ enum DayTypes
 #define ASPIRE       ORANGE
 #define OUTOFCLUSTER ORANGE
 
-
 /////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////
 // SCHEDULE RELATED STRUCTURE DEFINITIONS
 /////////////////////////////////////////////////////////
+
 typedef struct _Period
 {
   uint8_t  begH;
@@ -129,15 +126,13 @@ typedef struct _BellSched
 
 typedef struct _SingleDay
 {
-  //bool        valid;
   uint16_t    Y;
   uint8_t     M;
   uint8_t     D;
-  BellSched*  dayType;
-  uint8_t     dayLetter;
+  const BellSched*  dayType;
 } SingleDay;
 
-const /*PROGMEM*/ BellSched NormalDay[]=
+const PROGMEM BellSched NormalDay[]=
 {
   9,
   { 8, 0, 8,50, OUTOFCLUSTER, RED,          OUTOFCLUSTER, YELLOW},
@@ -151,7 +146,7 @@ const /*PROGMEM*/ BellSched NormalDay[]=
   {13,38,14,26, PURPLE,       GREEN,        OUTOFCLUSTER, BLUE},
 };
 
-const /*PROGMEM*/ BellSched ER1115[]=
+const PROGMEM BellSched ER1115[]=
 {
   7,
   { 8, 0, 8,28, OUTOFCLUSTER, RED,          OUTOFCLUSTER, YELLOW},
@@ -163,7 +158,7 @@ const /*PROGMEM*/ BellSched ER1115[]=
   {10,50,11,15, PURPLE,       GREEN,        OUTOFCLUSTER, BLUE},
 };
 
-const /*PROGMEM*/ BellSched ER1200[]=
+const PROGMEM BellSched ER1200[]=
 {
   7,
   { 8, 0, 8,33, OUTOFCLUSTER, RED,          OUTOFCLUSTER, YELLOW},
@@ -175,7 +170,7 @@ const /*PROGMEM*/ BellSched ER1200[]=
   {11,28,12,00, PURPLE,       GREEN,        OUTOFCLUSTER, BLUE},
 };
 
-const /*PROGMEM*/ BellSched ER1300[]=
+const PROGMEM BellSched ER1300[]=
 {
   8,
   { 8, 0, 8,37, OUTOFCLUSTER, RED,          OUTOFCLUSTER, YELLOW},
@@ -189,200 +184,200 @@ const /*PROGMEM*/ BellSched ER1300[]=
 };
 
 // days not present are either weekend days or holidays
-const /*PROGMEM*/ SingleDay TheCalendar[]=
+const PROGMEM SingleDay TheCalendar[]=
 {
-  {2018,9,4,NormalDay,'A'},
-  {2018,9,5,NormalDay,'B'},
-  {2018,9,6,NormalDay,'C'},
-  {2018,9,7,NormalDay,'D'},
-  {2018,9,11,NormalDay,'A'},
-  {2018,9,12,NormalDay,'B'},
-  {2018,9,13,NormalDay,'C'},
-  {2018,9,14,NormalDay,'D'},
-  {2018,9,17,NormalDay,'A'},
-  {2018,9,18,ER1300,'B'},
-  {2018,9,20,NormalDay,'C'},
-  {2018,9,21,NormalDay,'D'},
-  {2018,9,24,NormalDay,'A'},
-  {2018,9,25,NormalDay,'B'},
-  {2018,9,26,NormalDay,'C'},
-  {2018,9,27,NormalDay,'D'},
-  {2018,9,28,NormalDay,'A'},
-  {2018,10,1,NormalDay,'B'},
-  {2018,10,2,NormalDay,'C'},
-  {2018,10,3,NormalDay,'D'},
-  {2018,10,4,NormalDay,'A'},
-  {2018,10,5,NormalDay,'B'},
-  {2018,10,9,NormalDay,'C'},
-  {2018,10,10,NormalDay,'D'},
-  {2018,10,11,NormalDay,'A'},
-  {2018,10,12,NormalDay,'B'},
-  {2018,10,15,NormalDay,'C'},
-  {2018,10,16,NormalDay,'D'},
-  {2018,10,17,NormalDay,'A'},
-  {2018,10,18,NormalDay,'B'},
-  {2018,10,19,NormalDay,'C'},
-  {2018,10,22,NormalDay,'D'},
-  {2018,10,23,ER1300,'A'},
-  {2018,10,24,NormalDay,'B'},
-  {2018,10,25,NormalDay,'C'},
-  {2018,10,26,NormalDay,'D'},
-  {2018,10,29,NormalDay,'A'},
-  {2018,10,30,NormalDay,'B'},
-  {2018,10,31,NormalDay,'C'},
-  {2018,11,1,ER1115,'D'},
-  {2018,11,2,NormalDay,'A'},
-  {2018,11,5,NormalDay,'B'},
-  {2018,11,7,NormalDay,'C'},
-  {2018,11,8,NormalDay,'D'},
-  {2018,11,9,NormalDay,'A'},
-  {2018,11,13,NormalDay,'B'},
-  {2018,11,14,NormalDay,'C'},
-  {2018,11,15,NormalDay,'D'},
-  {2018,11,16,NormalDay,'A'},
-  {2018,11,19,NormalDay,'B'},
-  {2018,11,20,NormalDay,'C'},
-  {2018,11,21,ER1200,'D'},
-  {2018,11,26,NormalDay,'A'},
-  {2018,11,27,NormalDay,'B'},
-  {2018,11,28,NormalDay,'C'},
-  {2018,11,29,NormalDay,'D'},
-  {2018,11,30,NormalDay,'A'},
-  {2018,12,3,NormalDay,'B'},
-  {2018,12,4,NormalDay,'C'},
-  {2018,12,5,NormalDay,'D'},
-  {2018,12,6,NormalDay,'A'},
-  {2018,12,7,NormalDay,'B'},
-  {2018,12,10,NormalDay,'C'},
-  {2018,12,11,NormalDay,'D'},
-  {2018,12,12,NormalDay,'A'},
-  {2018,12,13,NormalDay,'B'},
-  {2018,12,14,NormalDay,'C'},
-  {2018,12,17,NormalDay,'D'},
-  {2018,12,18,ER1300,'A'},
-  {2018,12,19,NormalDay,'B'},
-  {2018,12,20,NormalDay,'C'},
-  {2018,12,21,ER1200,'D'},
-  {2019,1,2,NormalDay,'A'},
-  {2019,1,3,NormalDay,'B'},
-  {2019,1,4,NormalDay,'C'},
-  {2019,1,7,NormalDay,'D'},
-  {2019,1,8,NormalDay,'A'},
-  {2019,1,9,NormalDay,'B'},
-  {2019,1,10,NormalDay,'C'},
-  {2019,1,11,NormalDay,'D'},
-  {2019,1,14,NormalDay,'A'},
-  {2019,1,15,ER1115,'B'},
-  {2019,1,16,NormalDay,'C'},
-  {2019,1,17,NormalDay,'D'},
-  {2019,1,18,NormalDay,'A'},
-  {2019,1,22,NormalDay,'B'},
-  {2019,1,23,NormalDay,'C'},
-  {2019,1,24,NormalDay,'D'},
-  {2019,1,25,NormalDay,'A'},
-  {2019,1,28,NormalDay,'B'},
-  {2019,1,29,NormalDay,'C'},
-  {2019,1,30,NormalDay,'D'},
-  {2019,1,31,NormalDay,'A'},
-  {2019,2,1,NormalDay,'B'},
-  {2019,2,4,NormalDay,'C'},
-  {2019,2,5,NormalDay,'D'},
-  {2019,2,6,NormalDay,'A'},
-  {2019,2,7,NormalDay,'B'},
-  {2019,2,8,NormalDay,'C'},
-  {2019,2,11,NormalDay,'D'},
-  {2019,2,12,NormalDay,'A'},
-  {2019,2,13,NormalDay,'B'},
-  {2019,2,14,NormalDay,'C'},
-  {2019,2,15,NormalDay,'D'},
-  {2019,2,25,NormalDay,'A'},
-  {2019,2,26,ER1300,'B'},
-  {2019,2,27,NormalDay,'C'},
-  {2019,2,28,NormalDay,'D'},
-  {2019,3,1,NormalDay,'A'},
-  {2019,3,4,NormalDay,'B'},
-  {2019,3,5,NormalDay,'C'},
-  {2019,3,6,NormalDay,'D'},
-  {2019,3,7,NormalDay,'A'},
-  {2019,3,8,NormalDay,'B'},
-  {2019,3,11,NormalDay,'C'},
-  {2019,3,12,NormalDay,'D'},
-  {2019,3,13,NormalDay,'A'},
-  {2019,3,14,NormalDay,'B'},
-  {2019,3,15,NormalDay,'C'},
-  {2019,3,18,NormalDay,'D'},
-  {2019,3,19,ER1300,'A'},
-  {2019,3,20,NormalDay,'B'},
-  {2019,3,21,NormalDay,'C'},
-  {2019,3,22,NormalDay,'D'},
-  {2019,3,25,NormalDay,'A'},
-  {2019,3,26,NormalDay,'B'},
-  {2019,3,27,NormalDay,'C'},
-  {2019,3,28,NormalDay,'D'},
-  {2019,3,29,NormalDay,'A'},
-  {2019,4,1,NormalDay,'B'},
-  {2019,4,2,NormalDay,'C'},
-  {2019,4,3,NormalDay,'D'},
-  {2019,4,4,NormalDay,'A'},
-  {2019,4,5,NormalDay,'B'},
-  {2019,4,8,NormalDay,'C'},
-  {2019,4,9,NormalDay,'D'},
-  {2019,4,10,NormalDay,'A'},
-  {2019,4,11,NormalDay,'B'},
-  {2019,4,12,NormalDay,'C'},
-  {2019,4,22,NormalDay,'D'},
-  {2019,4,23,ER1300,'A'},
-  {2019,4,24,NormalDay,'B'},
-  {2019,4,25,NormalDay,'C'},
-  {2019,4,26,NormalDay,'D'},
-  {2019,4,29,NormalDay,'A'},
-  {2019,4,30,NormalDay,'B'},
-  {2019,5,1,NormalDay,'C'},
-  {2019,5,2,NormalDay,'D'},
-  {2019,5,3,NormalDay,'A'},
-  {2019,5,6,NormalDay,'B'},
-  {2019,5,7,NormalDay,'C'},
-  {2019,5,8,NormalDay,'D'},
-  {2019,5,9,NormalDay,'A'},
-  {2019,5,10,NormalDay,'B'},
-  {2019,5,13,NormalDay,'C'},
-  {2019,5,14,NormalDay,'D'},
-  {2019,5,15,NormalDay,'A'},
-  {2019,5,16,NormalDay,'B'},
-  {2019,5,17,NormalDay,'C'},
-  {2019,5,20,NormalDay,'D'},
-  {2019,5,21,ER1300,'A'},
-  {2019,5,22,NormalDay,'B'},
-  {2019,5,23,NormalDay,'C'},
-  {2019,5,24,NormalDay,'D'},
-  {2019,5,28,NormalDay,'A'},
-  {2019,5,29,NormalDay,'B'},
-  {2019,5,30,NormalDay,'C'},
-  {2019,5,31,NormalDay,'D'},
-  {2019,6,3,NormalDay,'A'},
-  {2019,6,4,NormalDay,'B'},
-  {2019,6,5,NormalDay,'C'},
-  {2019,6,6,NormalDay,'D'},
-  {2019,6,7,NormalDay,'A'},
-  {2019,6,10,NormalDay,'B'},
-  {2019,6,11,NormalDay,'C'},
-  {2019,6,12,NormalDay,'D'},
-  {2019,6,13,NormalDay,'A'},
-  {2019,6,14,NormalDay,'B'},
-  {2019,6,17,NormalDay,'C'},
-  {2019,6,18,NormalDay,'D'},
-  {2019,6,19,NormalDay,'A'},
-  {2019,6,20,NormalDay,'B'},
-  {2019,6,21,NormalDay,'C'},
-  {2019,6,24,NormalDay,'D'},
-  {2019,6,25,NormalDay,'A'},
-  {2019,6,26,NormalDay,'B'},
-  {2019,6,27,NormalDay,'C'},
-  {2019,6,28,NormalDay,'D'},
+  {2018,9,4,NormalDay},
+  {2018,9,5,NormalDay},
+  {2018,9,6,NormalDay},
+  {2018,9,7,NormalDay},
+  {2018,9,11,NormalDay},
+  {2018,9,12,NormalDay},
+  {2018,9,13,NormalDay},
+  {2018,9,14,NormalDay},
+  {2018,9,17,NormalDay},
+  {2018,9,18,ER1300},
+  {2018,9,20,NormalDay},
+  {2018,9,21,NormalDay},
+  {2018,9,24,NormalDay},
+  {2018,9,25,NormalDay},
+  {2018,9,26,NormalDay},
+  {2018,9,27,NormalDay},
+  {2018,9,28,NormalDay},
+  {2018,10,1,NormalDay},
+  {2018,10,2,NormalDay},
+  {2018,10,3,NormalDay},
+  {2018,10,4,NormalDay},
+  {2018,10,5,NormalDay},
+  {2018,10,9,NormalDay},
+  {2018,10,10,NormalDay},
+  {2018,10,11,NormalDay},
+  {2018,10,12,NormalDay},
+  {2018,10,15,NormalDay},
+  {2018,10,16,NormalDay},
+  {2018,10,17,NormalDay},
+  {2018,10,18,NormalDay},
+  {2018,10,19,NormalDay},
+  {2018,10,22,NormalDay},
+  {2018,10,23,ER1300},
+  {2018,10,24,NormalDay},
+  {2018,10,25,NormalDay},
+  {2018,10,26,NormalDay},
+  {2018,10,29,NormalDay},
+  {2018,10,30,NormalDay},
+  {2018,10,31,NormalDay},
+  {2018,11,1,ER1115},
+  {2018,11,2,NormalDay},
+  {2018,11,5,NormalDay},
+  {2018,11,7,NormalDay},
+  {2018,11,8,NormalDay},
+  {2018,11,9,NormalDay},
+  {2018,11,13,NormalDay},
+  {2018,11,14,NormalDay},
+  {2018,11,15,NormalDay},
+  {2018,11,16,NormalDay},
+  {2018,11,19,NormalDay},
+  {2018,11,20,NormalDay},
+  {2018,11,21,ER1200},
+  {2018,11,26,NormalDay},
+  {2018,11,27,NormalDay},
+  {2018,11,28,NormalDay},
+  {2018,11,29,NormalDay},
+  {2018,11,30,NormalDay},
+  {2018,12,3,NormalDay},
+  {2018,12,4,NormalDay},
+  {2018,12,5,NormalDay},
+  {2018,12,6,NormalDay},
+  {2018,12,7,NormalDay},
+  {2018,12,10,NormalDay},
+  {2018,12,11,NormalDay},
+  {2018,12,12,NormalDay},
+  {2018,12,13,NormalDay},
+  {2018,12,14,NormalDay},
+  {2018,12,17,NormalDay},
+  {2018,12,18,ER1300},
+  {2018,12,19,NormalDay},
+  {2018,12,20,NormalDay},
+  {2018,12,21,ER1200},
+  {2019,1,2,NormalDay},
+  {2019,1,3,NormalDay},
+  {2019,1,4,NormalDay},
+  {2019,1,7,NormalDay},
+  {2019,1,8,NormalDay},
+  {2019,1,9,NormalDay},
+  {2019,1,10,NormalDay},
+  {2019,1,11,NormalDay},
+  {2019,1,14,NormalDay},
+  {2019,1,15,ER1115},
+  {2019,1,16,NormalDay},
+  {2019,1,17,NormalDay},
+  {2019,1,18,NormalDay},
+  {2019,1,22,NormalDay},
+  {2019,1,23,NormalDay},
+  {2019,1,24,NormalDay},
+  {2019,1,25,NormalDay},
+  {2019,1,28,NormalDay},
+  {2019,1,29,NormalDay},
+  {2019,1,30,NormalDay},
+  {2019,1,31,NormalDay},
+  {2019,2,1,NormalDay},
+  {2019,2,4,NormalDay},
+  {2019,2,5,NormalDay},
+  {2019,2,6,NormalDay},
+  {2019,2,7,NormalDay},
+  {2019,2,8,NormalDay},
+  {2019,2,11,NormalDay},
+  {2019,2,12,NormalDay},
+  {2019,2,13,NormalDay},
+  {2019,2,14,NormalDay},
+  {2019,2,15,NormalDay},
+  {2019,2,25,NormalDay},
+  {2019,2,26,ER1300},
+  {2019,2,27,NormalDay},
+  {2019,2,28,NormalDay},
+  {2019,3,1,NormalDay},
+  {2019,3,4,NormalDay},
+  {2019,3,5,NormalDay},
+  {2019,3,6,NormalDay},
+  {2019,3,7,NormalDay},
+  {2019,3,8,NormalDay},
+  {2019,3,11,NormalDay},
+  {2019,3,12,NormalDay},
+  {2019,3,13,NormalDay},
+  {2019,3,14,NormalDay},
+  {2019,3,15,NormalDay},
+  {2019,3,18,NormalDay},
+  {2019,3,19,ER1300},
+  {2019,3,20,NormalDay},
+  {2019,3,21,NormalDay},
+  {2019,3,22,NormalDay},
+  {2019,3,25,NormalDay},
+  {2019,3,26,NormalDay},
+  {2019,3,27,NormalDay},
+  {2019,3,28,NormalDay},
+  {2019,3,29,NormalDay},
+  {2019,4,1,NormalDay},
+  {2019,4,2,NormalDay},
+  {2019,4,3,NormalDay},
+  {2019,4,4,NormalDay},
+  {2019,4,5,NormalDay},
+  {2019,4,8,NormalDay},
+  {2019,4,9,NormalDay},
+  {2019,4,10,NormalDay},
+  {2019,4,11,NormalDay},
+  {2019,4,12,NormalDay},
+  {2019,4,22,NormalDay},
+  {2019,4,23,ER1300},
+  {2019,4,24,NormalDay},
+  {2019,4,25,NormalDay},
+  {2019,4,26,NormalDay},
+  {2019,4,29,NormalDay},
+  {2019,4,30,NormalDay},
+  {2019,5,1,NormalDay},
+  {2019,5,2,NormalDay},
+  {2019,5,3,NormalDay},
+  {2019,5,6,NormalDay},
+  {2019,5,7,NormalDay},
+  {2019,5,8,NormalDay},
+  {2019,5,9,NormalDay},
+  {2019,5,10,NormalDay},
+  {2019,5,13,NormalDay},
+  {2019,5,14,NormalDay},
+  {2019,5,15,NormalDay},
+  {2019,5,16,NormalDay},
+  {2019,5,17,NormalDay},
+  {2019,5,20,NormalDay},
+  {2019,5,21,ER1300},
+  {2019,5,22,NormalDay},
+  {2019,5,23,NormalDay},
+  {2019,5,24,NormalDay},
+  {2019,5,28,NormalDay},
+  {2019,5,29,NormalDay},
+  {2019,5,30,NormalDay},
+  {2019,5,31,NormalDay},
+  {2019,6,3,NormalDay},
+  {2019,6,4,NormalDay},
+  {2019,6,5,NormalDay},
+  {2019,6,6,NormalDay},
+  {2019,6,7,NormalDay},
+  {2019,6,10,NormalDay},
+  {2019,6,11,NormalDay},
+  {2019,6,12,NormalDay},
+  {2019,6,13,NormalDay},
+  {2019,6,14,NormalDay},
+  {2019,6,17,NormalDay},
+  {2019,6,18,NormalDay},
+  {2019,6,19,NormalDay},
+  {2019,6,20,NormalDay},
+  {2019,6,21,NormalDay},
+  {2019,6,24,NormalDay},
+  {2019,6,25,NormalDay},
+  {2019,6,26,NormalDay},
+  {2019,6,27,NormalDay},
+  {2019,6,28,NormalDay},
 };
 
 const uint8_t DayCount = sizeof(TheCalendar)/sizeof(SingleDay);
-SingleDay *Today = 0;
+uint8_t Today = 255;
 
 /////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////
@@ -413,7 +408,7 @@ void setup()
   initChronoDot();
   strip.begin();
   strip.show();
-  delay(3000);
+  //delay(3000);
 }
 
 void loop()
@@ -436,12 +431,12 @@ void DoNewDayStuff()
   {
     dayType = dtWeekend;
     clockType = ctWeekend;
-    Today = 0;
+    Today = TODAY_IS_A_WEEKEND;
   }
   else
   {
     Today = isSchoolDay();
-    if ( 0 != Today )
+    if ( TODAY_IS_A_HOLIDAY != Today )
     {
       dayType = dtSchoolDay;
       clockType = ctBeforeSchool;
@@ -461,12 +456,11 @@ void DoNewMinuteStuff()
   else
   {
     //check against bellschedule, set pointer to current period, and set clock type
-    BellSched *bs = Today->dayType;
+    BellSched *bs = CalGetDayType(Today);
     if ( clockType == ctBeforeSchool )
     {
       // see if we've made it to first period
-      Period *p = &bs->Periods[0];
-      if ( now.hour() == p->begH && now.minute() == p->begM )
+      if ( now.hour() == BSGetBegHour(bs,0) && now.minute() == BSGetBegMin(bs,0) )
       {
         currentPeriod = 0;
         clockType = ctDuringClass;
@@ -474,25 +468,23 @@ void DoNewMinuteStuff()
     }
     else
     {
-      Period *p = &bs->Periods[currentPeriod];
-      if ( currentPeriod < bs->NumPeriods-1 )
+      if ( currentPeriod < BSGetNumPeriods(bs)-1 )
       {
-        Period *np = &bs->Periods[currentPeriod+1];
         // consider we may have started the next period
-        if ( isAfterTime(now.hour(), now.minute(), np->begH, np->begM) )
+        if ( isAfterTime(now.hour(), now.minute(), BSGetBegHour(bs,currentPeriod+1), BSGetBegMin(bs,currentPeriod+1)) )
         {
           clockType = ctDuringClass;
           currentPeriod++;
           return;
         }
       }
-      if ( timeDiff(p->endH, p->endM, now.hour(), now.minute())  < countdownM )
+      if ( timeDiff(BSGetEndHour(bs,currentPeriod), BSGetEndMin(bs,currentPeriod), now.hour(), now.minute())  < countdownM )
       {
         clockType = ctEndFlash;
       }
-      else if ( isAfterTime(now.hour(), now.minute(), p->endH, p->endM) )
+      else if ( isAfterTime(now.hour(), now.minute(), BSGetEndHour(bs,currentPeriod), BSGetEndMin(bs,currentPeriod)) )
       {
-        if ( currentPeriod < bs->NumPeriods-1 )
+        if ( currentPeriod < BSGetNumPeriods(bs)-1 )
         {
           clockType = ctPassing;
         }
@@ -541,11 +533,6 @@ void displayClock()
 // CHECK
 /////////////////////////////////////////////////////////
 // returns true if the first number is before the
-boolean isBeforeTime(uint8_t h0, uint8_t m0, uint8_t h1, uint8_t m1)
-{
-  if (timeDiff(h0, m0, h1, m1) < 0) return true;
-  else return false;
-}
 
 boolean isAfterTime(uint8_t h0, uint8_t m0, uint8_t h1, uint8_t m1)
 {
@@ -562,19 +549,23 @@ int timeDiff(uint8_t h0, uint8_t m0, uint8_t h1, uint8_t m1)
   return t0 - t1;
 }
 
-SingleDay *isSchoolDay()
+uint8_t isSchoolDay()
 {
-  if (isWeekend()) return 0;
+  // returns index into TheCalendar array
+  if (isWeekend()) return TODAY_IS_A_WEEKEND;
   for (uint8_t i=0; i<DayCount; i++)
   {
+    uint16_t cy=CalGetYear(i);
+    uint8_t cm=CalGetMonth(i);
+    uint8_t cd=CalGetDay(i);
+    
     // loop thru calendar until we've either found the current day, or gone past
-    SingleDay *d = &TheCalendar[i];
-    if ( d->D == now.day() && d->M == now.month() && d->Y == now.year() ) return d;
-    else if ( d->Y > now.year() ) break;
-    else if ( d->Y == now.year() && d->M > now.month() ) break;
-    else if (d->Y == now.year() && d->M == now.month() && d->D > now.day()) break;
+    if ( cd == now.day() && cm == now.month() && cy == now.year() ) return i;
+    else if ( cy > now.year() ) break;
+    else if ( cy == now.year() && cm > now.month() ) break;
+    else if ( cy == now.year() && cm == now.month() && cd > now.day()) break;
   }
-  return 0;
+  return TODAY_IS_A_HOLIDAY;
 }
 
 boolean isWeekend()
@@ -582,13 +573,6 @@ boolean isWeekend()
   // 0 = Sunday, 1 = Monday, ...., 6 = Saturday
   if (now.dayOfTheWeek() == 0 || now.dayOfTheWeek() == 6) return true;
   return false;
-}
-
-boolean isBetweenTime(uint8_t h0, uint8_t m0, uint8_t h1, uint8_t m1)
-{
-  DateTime startTime (now.year(), now.month(), now.day(), h0, m0, 0);
-  DateTime endTime (now.year(), now.month(), now.day(), h1, m1, 0);
-  return (now.unixtime() >= startTime.unixtime() && now.unixtime() < endTime.unixtime());
 }
 
 /////////////////////////////////////////////////////////
@@ -612,9 +596,10 @@ void displayColon(uint32_t c)
 
 void countdownClock()
 {
-  Period *p=&Today->dayType->Periods[currentPeriod];
-  uint8_t h = p->endH;
-  uint8_t m = p->endM;
+  BellSched *bs=CalGetDayType(Today);
+  Period *p=&bs->Periods[currentPeriod];
+  uint8_t h = BSGetEndHour(bs,currentPeriod);
+  uint8_t m = BSGetEndMin(bs,currentPeriod);
   DateTime endTime(now.year(), now.month(), now.day(), h, m, 0);
   uint8_t minLeft = (endTime.unixtime() - now.unixtime()) / 60;
   uint8_t secLeft = (endTime.unixtime() - now.unixtime()) - minLeft * 60;
@@ -682,7 +667,7 @@ void pulseClock(uint32_t col, int delayTime)
     displayColon(col);
     strip.setBrightness(j);
     strip.show();
-    unsigned long t = millis();
+    uint32_t t = millis();
     while (millis() - t < delayTime)
     {
       displayColon(col);
@@ -719,11 +704,11 @@ void gradientClock()
 int getGradientColor(uint8_t h, uint8_t m)
 {
   // DateTime (year, month, day, hour, min, sec);
-  Period  *p=&Today->dayType->Periods[currentPeriod];
-  uint8_t h0 = p->begH;
-  uint8_t m0 = p->begM;
-  uint8_t h1 = p->endH;
-  uint8_t m1 = p->endM;
+  BellSched *bs=CalGetDayType(Today);
+  uint8_t h0 = BSGetBegHour(bs,currentPeriod);
+  uint8_t m0 = BSGetBegMin(bs,currentPeriod);
+  uint8_t h1 = BSGetEndHour(bs,currentPeriod);
+  uint8_t m1 = BSGetEndMin(bs,currentPeriod);
   DateTime startTime(now.year(), now.month(), now.day(), h0, m0, 0);
   DateTime endTime(now.year(), now.month(), now.day(), h1, m1, 0);
   #ifdef DEBUG
@@ -791,20 +776,22 @@ void displayMinute(uint8_t m, uint32_t col)
 
 uint32_t getLetterColor()
 {
-  Period *p = &Today->dayType->Periods[currentPeriod];
-  uint8_t dl=Today->dayLetter;
-  switch(dl)
+  BellSched *bs = CalGetDayType(Today);
+  if ( Today == TODAY_IS_A_HOLIDAY || Today == TODAY_IS_A_WEEKEND ) return 0;
+  else
   {
-    case 'A':
-    return p->aCol;
-    case 'B':
-    return p->bCol;
-    case 'C':
-    return p->cCol;
-    case 'D':
-    return p->dCol;
-    default:
-    return 0;
+    uint8_t dl=Today%4;
+    switch(dl)
+    {
+      case 0:
+      return BSGetACol(bs,currentPeriod);
+      case 1:
+      return BSGetBCol(bs,currentPeriod);
+      case 2:
+      return BSGetCCol(bs,currentPeriod);
+      case 3:
+      return BSGetDCol(bs,currentPeriod);
+    }
   }
 }
 
@@ -905,8 +892,8 @@ void initChronoDot(int y, int mon, int d, int h, int minu, int s)
 
 uint8_t getLetter()
 {
-  if ( dayType == dtWeekend || dayType == dtHoliday || clockType == ctBeforeSchool || clockType == ctAfterSchool ) return 9;
-  else return Today->dayLetter;
+  if ( dayType == dtWeekend || dayType == dtHoliday || clockType == ctBeforeSchool || clockType == ctAfterSchool ) return 65+9;
+  else return CalGetDayLetter(Today);
 }
 
 void printClock()
@@ -918,4 +905,112 @@ void printClock()
   Serial.print(":");
   Serial.println(now.second());
   #endif
+}
+
+/////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
+// CALENDAR and BELLSCHED GET DATA FUNCTIONS
+/////////////////////////////////////////////////////////
+
+uint16_t CalGetYear(uint8_t i)
+{
+  uint16_t offset=i*sizeof(SingleDay);
+  offset += offsetof(SingleDay,Y);
+  return pgm_read_word_near(TheCalendar + offset);
+}
+
+uint8_t CalGetMonth(uint8_t i)
+{
+  uint16_t offset=i*sizeof(SingleDay);
+  offset += offsetof(SingleDay,M);
+  return pgm_read_byte_near(TheCalendar + offset);
+}
+
+uint8_t CalGetDay(uint8_t i)
+{
+  uint16_t offset=i*sizeof(SingleDay);
+  offset += offsetof(SingleDay,D);
+  return pgm_read_byte_near(TheCalendar + offset);
+}
+
+BellSched *CalGetDayType(uint8_t i)
+{
+  uint16_t offset=i*sizeof(SingleDay);
+  offset += offsetof(SingleDay,dayType);
+  return pgm_read_word_near(TheCalendar + offset);
+}
+
+uint8_t CalGetDayLetter(uint8_t i)
+{
+  return i%4+65;
+}
+
+uint8_t BSGetBegHour( BellSched *BS, uint8_t P)
+{
+  uint16_t offset=P*sizeof(Period);
+  offset += offsetof(Period,begH);
+  offset += sizeof(uint8_t); //NumPeriods
+  return pgm_read_byte_near(BS+offset);
+}
+
+uint8_t BSGetBegMin( BellSched *BS, uint8_t P)
+{
+  uint16_t offset=P*sizeof(Period);
+  offset += offsetof(Period,begM);
+  offset += sizeof(uint8_t); //NumPeriods
+  return pgm_read_byte_near(BS+offset);
+}
+
+uint8_t BSGetEndHour( BellSched *BS, uint8_t P)
+{
+  uint16_t offset=P*sizeof(Period);
+  offset += offsetof(Period,endH);
+  offset += sizeof(uint8_t); //NumPeriods
+  return pgm_read_byte_near(BS+offset);
+}
+
+uint8_t BSGetEndMin( BellSched *BS, uint8_t P)
+{
+  uint16_t offset=P*sizeof(Period);
+  offset += offsetof(Period,endM);
+  offset += sizeof(uint8_t); //NumPeriods
+  return pgm_read_byte_near(BS+offset);
+}
+
+uint32_t BSGetACol( BellSched *BS, uint8_t P)
+{
+  uint16_t offset=P*sizeof(Period);
+  offset += offsetof(Period,aCol);
+  offset += sizeof(uint8_t); //NumPeriods
+  return pgm_read_dword_near(BS+offset);
+}
+
+uint32_t BSGetBCol( BellSched *BS, uint8_t P)
+{
+  uint16_t offset=P*sizeof(Period);
+  offset += offsetof(Period,bCol);
+  offset += sizeof(uint8_t); //NumPeriods
+  return pgm_read_dword_near(BS+offset);
+}
+
+uint32_t BSGetCCol( BellSched *BS, uint8_t P)
+{
+  uint16_t offset=P*sizeof(Period);
+  offset += offsetof(Period,cCol);
+  offset += sizeof(uint8_t); //NumPeriods
+  return pgm_read_dword_near(BS+offset);
+}
+
+uint32_t BSGetDCol( BellSched *BS, uint8_t P)
+{
+  uint16_t offset=P*sizeof(Period);
+  offset += offsetof(Period,dCol);
+  offset += sizeof(uint8_t); //NumPeriods
+  return pgm_read_dword_near(BS+offset);
+}
+
+uint8_t BSGetNumPeriods( BellSched *BS )
+{
+  uint16_t offset = offsetof(BellSched,NumPeriods);
+  return pgm_read_byte_near(BS+offset);
 }

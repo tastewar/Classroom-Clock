@@ -41,6 +41,14 @@ uint8_t currentMinute = 60;
 uint8_t currentPeriod = 0;
 uint8_t currentDay = 0;
 
+////////////////////////////////////////////////////////
+//// CLOCK ADJUSTMENTS
+////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////
+
+#define COMPILE_TIME  12
+#define OTTOSON_CLOCK_CORRECTION -80
+
 const /*PROGMEM*/ uint8_t numbers[] = {
   B11101110,    // 0
   B10001000,    // 1
@@ -789,12 +797,15 @@ void initChronoDot()
   // the compilation time.  If necessary, the RTC is updated.
   now = RTC.now();
   DateTime compiled = DateTime(__DATE__, __TIME__);
-  if (now.unixtime() < compiled.unixtime())
+  uint32_t t=compiled.unixtime();
+  t+=COMPILE_TIME;
+  t+=OTTOSON_CLOCK_CORRECTION;
+  if (now.unixtime() < t)
   {
     #ifdef DEBUG
     Serial.println("RTC is older than compile time! Updating");
     #endif
-    RTC.adjust(DateTime(__DATE__, __TIME__));
+    RTC.adjust(DateTime(t));
   }
   now = RTC.now();
   #ifdef DEBUG

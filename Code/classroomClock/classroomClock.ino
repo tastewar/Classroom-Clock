@@ -263,7 +263,7 @@ uint8_t secBetweenFlashes = 4;
 void setup()
 {
   #ifdef DEBUG
-  Serial.begin(57600);
+  Serial.begin(9600);
   #endif
   /*
    * For testing purposes, you can set the clock to custom values, e.g.:
@@ -295,37 +295,48 @@ void loop()
 
 void DeterminePeriod()
 {
-  BellSched *bs=CalGetDayType(Today);
-  uint8_t p,n=BSGetNumPeriods(bs);
-
-  if (isAfterTime(now.hour(), now.minute(), BSGetEndHour(bs,n), BSGetEndMin(bs,n)))
+  if ( Today == TODAY_IS_A_WEEKEND )
   {
-    currentPeriod=n;
-    clockType = ctAfterSchool;
-    return;
+    clockType = ctWeekend;
   }
-  else for (p=0;p<n;p++)
+  else if ( Today == TODAY_IS_A_HOLIDAY )
   {
-    if (!isAfterTime(now.hour(), now.minute(), BSGetBegHour(bs,p), BSGetBegMin(bs,p))) break;
-  }
-  if (p==0)
-  {
-    //before the first period
-    currentPeriod=0;
-    clockType=ctBeforeSchool;
-    return;
+    clockType = ctHoliday;
   }
   else
   {
-    currentPeriod = p-1;
-    if (isAfterTime(now.hour(), now.minute(), BSGetEndHour(bs,currentPeriod), BSGetEndMin(bs,currentPeriod)))
-    {
-      clockType = ctPassing;
-    }
-    else clockType = ctDuringClass;
-  }
+    BellSched *bs=CalGetDayType(Today);
+    uint8_t p,n=BSGetNumPeriods(bs);
   
+    if (isAfterTime(now.hour(), now.minute(), BSGetEndHour(bs,n), BSGetEndMin(bs,n)))
+    {
+      currentPeriod=n;
+      clockType = ctAfterSchool;
+      return;
+    }
+    else for (p=0;p<n;p++)
+    {
+      if (!isAfterTime(now.hour(), now.minute(), BSGetBegHour(bs,p), BSGetBegMin(bs,p))) break;
+    }
+    if (p==0)
+    {
+      //before the first period
+      currentPeriod=0;
+      clockType=ctBeforeSchool;
+      return;
+    }
+    else
+    {
+      currentPeriod = p-1;
+      if (isAfterTime(now.hour(), now.minute(), BSGetEndHour(bs,currentPeriod), BSGetEndMin(bs,currentPeriod)))
+      {
+        clockType = ctPassing;
+      }
+      else clockType = ctDuringClass;
+    }
+  }  
 }
+
 void DoNewDayStuff()
 {
   currentPeriod = 0;

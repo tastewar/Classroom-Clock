@@ -253,7 +253,7 @@ uint8_t Today = 255;
 
 
 // number of minutes before end of class when countdown clock is triggered
-uint8_t countdownM = 6;
+uint8_t countdownM = 5;
 uint8_t secBetweenFlashes = 4;
 
 /////////////////////////////////////////////////////////
@@ -800,29 +800,8 @@ void initChronoDot()
   // Instantiate the RTC
   Wire.begin();
   RTC.begin();
-  // Check if the RTC is running.
-  #ifdef DEBUG
-  if (! RTC.isrunning()) Serial.println("RTC is NOT running");
-  #endif
-  // This section grabs the current datetime and compares it to
-  // the compilation time.  If necessary, the RTC is updated.
-  now = RTC.now();
-  DateTime compiled = DateTime(__DATE__, __TIME__);
-  uint32_t t=compiled.unixtime();
-  t+=COMPILE_TIME;
-  t+=OTTOSON_CLOCK_CORRECTION;
-  if (now.unixtime() < t)
-  {
-    #ifdef DEBUG
-    Serial.println("RTC is older than compile time! Updating");
-    #endif
-    RTC.adjust(DateTime(t));
-  }
-  now = RTC.now();
-  #ifdef DEBUG
-  Serial.println("Setup complete.");
-  #endif
-}
+  // I have removed the conditional clock setting code from here.
+  // I think it is better to have a dedicated sketch for setting the clock
 
 // Use this function to set a specific initial DateTime
 // useful for debugging

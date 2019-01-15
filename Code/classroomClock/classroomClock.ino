@@ -161,13 +161,13 @@ const PROGMEM BellSched ER1115=
 {
   7,
   {
-    { 8, 0, 8,28, OUTOFCLUSTER, RED,          OUTOFCLUSTER, YELLOW},
-    { 8,30, 8,56, RED,          YELLOW,       YELLOW,       OUTOFCLUSTER},
-    { 8,58, 9,24, YELLOW,       OUTOFCLUSTER, RED,          RED},
-    { 9,26, 9,52, GREEN,        OUTOFCLUSTER, BLUE,         GREEN},
-    { 9,54,10,20, OUTOFCLUSTER, BLUE,         GREEN,        PURPLE},
-    {10,22,10,48, BLUE,         PURPLE,       PURPLE,       OUTOFCLUSTER},
-    {10,50,11,15, PURPLE,       GREEN,        OUTOFCLUSTER, BLUE},
+    { 8, 0, 8,26, OUTOFCLUSTER, RED,          OUTOFCLUSTER, YELLOW},
+    { 8,28, 8,54, RED,          YELLOW,       YELLOW,       OUTOFCLUSTER},
+    { 8,56, 9,22, YELLOW,       OUTOFCLUSTER, RED,          RED},
+    { 9,24, 9,50, GREEN,        OUTOFCLUSTER, BLUE,         GREEN},
+    { 9,52,10,18, OUTOFCLUSTER, BLUE,         GREEN,        PURPLE},
+    {10,20,10,46, BLUE,         PURPLE,       PURPLE,       OUTOFCLUSTER},
+    {10,48,11,15, PURPLE,       GREEN,        OUTOFCLUSTER, BLUE},
   }
 };
 
@@ -802,6 +802,7 @@ void initChronoDot()
   RTC.begin();
   // I have removed the conditional clock setting code from here.
   // I think it is better to have a dedicated sketch for setting the clock
+}
 
 // Use this function to set a specific initial DateTime
 // useful for debugging

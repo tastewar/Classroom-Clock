@@ -271,7 +271,7 @@ void setup()
    * Otherwise, the clock automatically sets itself to your computer's
    * time with the function initChronoDot();
   */
-  // initChronoDot(2016, 11, 7, 15, 59, 50);
+  //initChronoDot(2019, 1, 15, 7, 56, 50);
   initChronoDot();
   now = RTC.now();
   DoNewDayStuff();
@@ -308,7 +308,7 @@ void DeterminePeriod()
     BellSched *bs=CalGetDayType(Today);
     uint8_t p,n=BSGetNumPeriods(bs);
   
-    if (isAfterTime(now.hour(), now.minute(), BSGetEndHour(bs,n), BSGetEndMin(bs,n)))
+    if (isAfterTime(now.hour(), now.minute(), BSGetEndHour(bs,n-1), BSGetEndMin(bs,n-1)))
     {
       currentPeriod=n;
       clockType = ctAfterSchool;
@@ -431,16 +431,16 @@ void displayClock()
   switch (clockType)
   {
     case ctWeekend:
-    colorClock(Wheel(0));
+    colorClock(0);
     break;
     case ctHoliday:
-    colorClock(Wheel(20));
+    colorClock(20);
     break;
     case ctBeforeSchool:
     pulseClock(Wheel(40), 5);
     break;
     case ctAfterSchool:
-    colorClock(Wheel(100));
+    colorClock(100);
     break;
     case ctEndFlash:
     countdownClock();

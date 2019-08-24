@@ -126,7 +126,7 @@ typedef struct _Period
   uint32_t dCol;
 } Period;
 
-#define MAX_PERIODS 9
+#define MAX_PERIODS 10
 typedef struct _BellSched
 {
   uint8_t NumPeriods;
@@ -141,107 +141,9 @@ typedef struct _SingleDay
   const BellSched*  dayType;
 } SingleDay;
 
-const PROGMEM BellSched NormalDay=
-{
-  9,
-  {
-    { 8, 0, 8,50, OUTOFCLUSTER, RED,          OUTOFCLUSTER, YELLOW},
-    { 8,52, 9,40, RED,          YELLOW,       YELLOW,       OUTOFCLUSTER},
-    { 9,42, 9,52, ASPIRE,       ASPIRE,       ASPIRE,       ASPIRE},
-    { 9,54,10,42, YELLOW,       OUTOFCLUSTER, RED,          RED},
-    {10,44,11,32, GREEN,        OUTOFCLUSTER, BLUE,         GREEN},
-    {11,34,12,23, OUTOFCLUSTER, BLUE,         GREEN,        PURPLE},
-    {12,25,12,46, LUNCH,        LUNCH,        LUNCH,        LUNCH},
-    {12,48,13,36, BLUE,         PURPLE,       PURPLE,       OUTOFCLUSTER},
-    {13,38,14,26, PURPLE,       GREEN,        OUTOFCLUSTER, BLUE},
-  }
-};
+#include "Schedules201920.h"
 
-const PROGMEM BellSched ER1115=
-{
-  7,
-  {
-    { 8, 0, 8,26, OUTOFCLUSTER, RED,          OUTOFCLUSTER, YELLOW},
-    { 8,28, 8,54, RED,          YELLOW,       YELLOW,       OUTOFCLUSTER},
-    { 8,56, 9,22, YELLOW,       OUTOFCLUSTER, RED,          RED},
-    { 9,24, 9,50, GREEN,        OUTOFCLUSTER, BLUE,         GREEN},
-    { 9,52,10,18, OUTOFCLUSTER, BLUE,         GREEN,        PURPLE},
-    {10,20,10,46, BLUE,         PURPLE,       PURPLE,       OUTOFCLUSTER},
-    {10,48,11,15, PURPLE,       GREEN,        OUTOFCLUSTER, BLUE},
-  }
-};
-
-const PROGMEM BellSched ER1200=
-{
-  7,
-  {
-    { 8, 0, 8,33, OUTOFCLUSTER, RED,          OUTOFCLUSTER, YELLOW},
-    { 8,35, 9, 8, RED,          YELLOW,       YELLOW,       OUTOFCLUSTER},
-    { 9,10, 9,43, YELLOW,       OUTOFCLUSTER, RED,          RED},
-    { 9,45,10,18, GREEN,        OUTOFCLUSTER, BLUE,         GREEN},
-    {10,20,10,52, OUTOFCLUSTER, BLUE,         GREEN,        PURPLE},
-    {10,54,11,26, BLUE,         PURPLE,       PURPLE,       OUTOFCLUSTER},
-    {11,28,12,00, PURPLE,       GREEN,        OUTOFCLUSTER, BLUE},
-  }
-};
-
-const PROGMEM BellSched ER1300=
-{
-  8,
-  {
-    { 8, 0, 8,37, OUTOFCLUSTER, RED,          OUTOFCLUSTER, YELLOW},
-    { 8,39, 9,16, RED,          YELLOW,       YELLOW,       OUTOFCLUSTER},
-    { 9,18, 9,55, YELLOW,       OUTOFCLUSTER, RED,          RED},
-    { 9,57,10,34, GREEN,        OUTOFCLUSTER, BLUE,         GREEN},
-    {10,36,11,12, BLUE,         PURPLE,       PURPLE,       OUTOFCLUSTER},
-    {11,14,12, 0, OUTOFCLUSTER, BLUE,         GREEN,        PURPLE},
-    {12, 2,12,22, LUNCH,        LUNCH,        LUNCH,        LUNCH},
-    {12,24,13, 0, PURPLE,       GREEN,        OUTOFCLUSTER, BLUE},
-  }
-};
-
-// days not present are either weekend days or holidays
-const PROGMEM SingleDay TheCalendar[]=
-{
-  {2018,9,4,&NormalDay},  {2018,9,5,&NormalDay},  {2018,9,6,&NormalDay},  {2018,9,7,&NormalDay},  {2018,9,11,&NormalDay},
-  {2018,9,12,&NormalDay},  {2018,9,13,&NormalDay},  {2018,9,14,&NormalDay},  {2018,9,17,&NormalDay},  {2018,9,18,&ER1300},
-  {2018,9,20,&NormalDay},  {2018,9,21,&NormalDay},  {2018,9,24,&NormalDay},  {2018,9,25,&NormalDay},  {2018,9,26,&NormalDay},
-  {2018,9,27,&NormalDay},  {2018,9,28,&NormalDay},  {2018,10,1,&NormalDay},  {2018,10,2,&NormalDay},  {2018,10,3,&NormalDay},
-  {2018,10,4,&NormalDay},  {2018,10,5,&NormalDay},  {2018,10,9,&NormalDay},  {2018,10,10,&NormalDay},  {2018,10,11,&NormalDay},
-  {2018,10,12,&NormalDay},  {2018,10,15,&NormalDay},  {2018,10,16,&NormalDay},  {2018,10,17,&NormalDay},  {2018,10,18,&NormalDay},
-  {2018,10,19,&NormalDay},  {2018,10,22,&NormalDay},  {2018,10,23,&ER1300},  {2018,10,24,&NormalDay},  {2018,10,25,&NormalDay},
-  {2018,10,26,&NormalDay},  {2018,10,29,&NormalDay},  {2018,10,30,&NormalDay},  {2018,10,31,&NormalDay},  {2018,11,1,&ER1115},
-  {2018,11,2,&NormalDay},  {2018,11,5,&NormalDay},  {2018,11,7,&NormalDay},  {2018,11,8,&NormalDay},  {2018,11,9,&NormalDay},
-  {2018,11,13,&NormalDay},  {2018,11,14,&NormalDay},  {2018,11,15,&NormalDay},  {2018,11,16,&NormalDay},  {2018,11,19,&NormalDay},
-  {2018,11,20,&NormalDay},  {2018,11,21,&ER1200},  {2018,11,26,&NormalDay},  {2018,11,27,&NormalDay},  {2018,11,28,&NormalDay},
-  {2018,11,29,&NormalDay},  {2018,11,30,&NormalDay},  {2018,12,3,&NormalDay},  {2018,12,4,&NormalDay},  {2018,12,5,&NormalDay},
-  {2018,12,6,&NormalDay},  {2018,12,7,&NormalDay},  {2018,12,10,&NormalDay},  {2018,12,11,&NormalDay},  {2018,12,12,&NormalDay},
-  {2018,12,13,&NormalDay},  {2018,12,14,&NormalDay},  {2018,12,17,&NormalDay},  {2018,12,18,&ER1300},  {2018,12,19,&NormalDay},
-  {2018,12,20,&NormalDay},  {2018,12,21,&ER1200},  {2019,1,2,&NormalDay},  {2019,1,3,&NormalDay},  {2019,1,4,&NormalDay},
-  {2019,1,7,&NormalDay},  {2019,1,8,&NormalDay},  {2019,1,9,&NormalDay},  {2019,1,10,&NormalDay},  {2019,1,11,&NormalDay},
-  {2019,1,14,&NormalDay},  {2019,1,15,&ER1115},  {2019,1,16,&NormalDay},  {2019,1,17,&NormalDay},  {2019,1,18,&NormalDay},
-  {2019,1,22,&NormalDay},  {2019,1,23,&NormalDay},  {2019,1,24,&NormalDay},  {2019,1,25,&NormalDay},  {2019,1,28,&NormalDay},
-  {2019,1,29,&NormalDay},  {2019,1,30,&NormalDay},  {2019,1,31,&NormalDay},  {2019,2,1,&NormalDay},  {2019,2,4,&NormalDay},
-  {2019,2,5,&NormalDay},  {2019,2,6,&NormalDay},  {2019,2,7,&NormalDay},  {2019,2,8,&NormalDay},  {2019,2,11,&NormalDay},
-  {2019,2,12,&NormalDay},  {2019,2,13,&NormalDay},  {2019,2,14,&NormalDay},  {2019,2,15,&NormalDay},  {2019,2,25,&NormalDay},
-  {2019,2,26,&ER1300},  {2019,2,27,&NormalDay},  {2019,2,28,&NormalDay},  {2019,3,1,&NormalDay},  {2019,3,4,&NormalDay},
-  {2019,3,5,&NormalDay},  {2019,3,6,&NormalDay},  {2019,3,7,&NormalDay},  {2019,3,8,&NormalDay},  {2019,3,11,&NormalDay},
-  {2019,3,12,&NormalDay},  {2019,3,13,&NormalDay},  {2019,3,14,&NormalDay},  {2019,3,15,&NormalDay},  {2019,3,18,&NormalDay},
-  {2019,3,19,&ER1300},  {2019,3,20,&NormalDay},  {2019,3,21,&NormalDay},  {2019,3,22,&NormalDay},  {2019,3,25,&NormalDay},
-  {2019,3,26,&NormalDay},  {2019,3,27,&NormalDay},  {2019,3,28,&NormalDay},  {2019,3,29,&NormalDay},  {2019,4,1,&NormalDay},
-  {2019,4,2,&NormalDay},  {2019,4,3,&NormalDay},  {2019,4,4,&NormalDay},  {2019,4,5,&NormalDay},  {2019,4,8,&NormalDay},
-  {2019,4,9,&NormalDay},  {2019,4,10,&NormalDay},  {2019,4,11,&NormalDay},  {2019,4,12,&NormalDay},  {2019,4,22,&NormalDay},
-  {2019,4,23,&ER1300},  {2019,4,24,&NormalDay},  {2019,4,25,&NormalDay},  {2019,4,26,&NormalDay},  {2019,4,29,&NormalDay},
-  {2019,4,30,&NormalDay},  {2019,5,1,&NormalDay},  {2019,5,2,&NormalDay},  {2019,5,3,&NormalDay},  {2019,5,6,&NormalDay},
-  {2019,5,7,&NormalDay},  {2019,5,8,&NormalDay},  {2019,5,9,&NormalDay},  {2019,5,10,&NormalDay},  {2019,5,13,&NormalDay},
-  {2019,5,14,&NormalDay},  {2019,5,15,&NormalDay},  {2019,5,16,&NormalDay},  {2019,5,17,&NormalDay},  {2019,5,20,&NormalDay},
-  {2019,5,21,&ER1300},  {2019,5,22,&NormalDay},  {2019,5,23,&NormalDay},  {2019,5,24,&NormalDay},  {2019,5,28,&NormalDay},
-  {2019,5,29,&NormalDay},  {2019,5,30,&NormalDay},  {2019,5,31,&NormalDay},  {2019,6,3,&NormalDay},  {2019,6,4,&NormalDay},
-  {2019,6,5,&NormalDay},  {2019,6,6,&NormalDay},  {2019,6,7,&NormalDay},  {2019,6,10,&NormalDay},  {2019,6,11,&NormalDay},
-  {2019,6,12,&NormalDay},  {2019,6,13,&NormalDay},  {2019,6,14,&NormalDay},  {2019,6,17,&NormalDay},  {2019,6,18,&NormalDay},
-  {2019,6,19,&NormalDay},  {2019,6,20,&NormalDay},  {2019,6,21,&NormalDay},  {2019,6,24,&NormalDay},  {2019,6,25,&NormalDay},
-  {2019,6,26,&NormalDay},  {2019,6,27,&NormalDay},  {2019,6,28,&NormalDay},
-};
+#include "Calendar201920.h"
 
 const uint8_t DayCount = sizeof(TheCalendar)/sizeof(SingleDay);
 uint8_t Today = 255;

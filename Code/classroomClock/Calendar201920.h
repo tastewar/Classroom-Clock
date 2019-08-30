@@ -2,7 +2,7 @@
 const PROGMEM SingleDay TheCalendar[]=
 {
   {2019, 8,27,&NormalDay},    {2019, 8,28,&NormalDay},    {2019, 8,29,&NormalDay},    {2019, 8,30,&NormalDay},
-  {2019, 9, 3,&NormalDay},    {2019, 9, 4,&NormalDay},    {2019, 9, 5,&NormalDay},    {2019, 9, 6,&NormalDay},    {2019, 9, 9,&NormalDay},
+  {2019, 9, 3, &FirstDay},    {2019, 9, 4,&NormalDay},    {2019, 9, 5,&NormalDay},    {2019, 9, 6,&NormalDay},    {2019, 9, 9,&NormalDay},
   {2019, 9,10,&NormalDay},    {2019, 9,11,&NormalDay},    {2019, 9,12,&NormalDay},    {2019, 9,13,&NormalDay},    {2019, 9,16,&NormalDay},
   {2019, 9,17,   &ER1300},    {2019, 9,18,&NormalDay},    {2019, 9,19,&NormalDay},    {2019, 9,20,&NormalDay},    {2019, 9,23,&NormalDay},
   {2019, 9,24,&NormalDay},    {2019, 9,25,&NormalDay},    {2019, 9,26,&NormalDay},    {2019, 9,27,&NormalDay},    {2019,10, 1,&NormalDay},

@@ -1,3 +1,20 @@
+const PROGMEM BellSched FirstDay=
+{
+  10,
+  {
+    { 8, 0, 9,40, ASPIRE,       OUTOFCLUSTER, RED,          OUTOFCLUSTER},
+    { 9,43,10,12, RED,          RED,          OUTOFCLUSTER, YELLOW},
+    {10,15,10,44, YELLOW,       ASPIRE,       ASPIRE,       ASPIRE},
+    {10,47,11,16, OUTOFCLUSTER, YELLOW,       YELLOW,       RED},
+    {11,19,12,10, GREEN,        GREEN,        GREEN,        GREEN},
+    {12,13,12,37, LUNCH,        PURPLE,       OUTOFCLUSTER, LUNCH},
+    {12,40,13, 9, BLUE,         LUNCH,        OUTOFCLUSTER, BLUE},
+    {13,12,13,41, PURPLE,       OUTOFCLUSTER, BLUE,         OUTOFCLUSTER},
+    {13,44,14,13, OUTOFCLUSTER, BLUE,         PURPLE,       PURPLE},
+    {14,16,14,26, ASPIRE,       BLUE,         PURPLE,       PURPLE},
+  }
+};
+
 const PROGMEM BellSched NormalDay=
 {
   10,

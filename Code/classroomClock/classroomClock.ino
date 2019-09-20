@@ -576,8 +576,9 @@ int getGradientColor(uint8_t h, uint8_t m)
 
 void displayHour(uint8_t h, uint32_t col)
 {
+  /* uncomment for 12 hour clock
   if (h == 0) h = 12;
-  else if (h > 12) h -= 12;
+  else if (h > 12) h -= 12; */
   uint8_t firstDigit = h / 10;
   uint8_t secondDigit = h % 10;
   // TODO - this only works for non-military time

@@ -68,10 +68,10 @@ const PROGMEM BellSched ER1300=
     { 8,39, 9,16, YELLOW,       RED,          OUTOFCLUSTER, YELLOW},
     { 9,18, 9,55, OUTOFCLUSTER, YELLOW,       YELLOW,       RED},
     { 9,57,10,34, GREEN,        GREEN,        GREEN,        GREEN},
-    {10,36,11,12, BLUE,         PURPLE,       OUTOFCLUSTER, BLUE},
-    {11,14,11,36, PURPLE,       OUTOFCLUSTER, BLUE,         OUTOFCLUSTER},
-    {11,38,12, 0, PURPLE,       OUTOFCLUSTER, BLUE,         OUTOFCLUSTER},
-    {12, 2,12,22, PURPLE,       OUTOFCLUSTER, BLUE,         OUTOFCLUSTER},
+    {10,36,11,12, PURPLE,       OUTOFCLUSTER, BLUE,         OUTOFCLUSTER},
+    {11,14,11,36, LUNCH,        PURPLE,       OUTOFCLUSTER, BLUE},
+    {11,38,12, 0, BLUE,         PURPLE,       OUTOFCLUSTER, LUNCH},
+    {12, 2,12,22, BLUE,         LUNCH,        OUTOFCLUSTER, BLUE},
     {12,24,13, 0, OUTOFCLUSTER, BLUE,         PURPLE,       PURPLE},
   }
 };

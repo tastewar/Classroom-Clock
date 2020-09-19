@@ -124,6 +124,7 @@ typedef struct _Period
   uint32_t bCol;
   uint32_t cCol;
   uint32_t dCol;
+  uint32_t eCol;
 } Period;
 
 #define MAX_PERIODS 10
@@ -141,9 +142,9 @@ typedef struct _SingleDay
   const BellSched*  dayType;
 } SingleDay;
 
-#include "Schedules201920.h"
+#include "Schedules202021.h"
 
-#include "Calendar201920.h"
+#include "Calendar202021.h"
 
 const uint8_t DayCount = sizeof(TheCalendar)/sizeof(SingleDay);
 uint8_t Today = 255;
@@ -637,7 +638,7 @@ uint32_t getLetterColor()
   if ( Today == TODAY_IS_A_HOLIDAY || Today == TODAY_IS_A_WEEKEND ) return 0;
   else
   {
-    uint8_t dl=Today%4;
+    uint8_t dl=Today%5;
     switch(dl)
     {
       case 0:
@@ -786,7 +787,7 @@ BellSched *CalGetDayType(uint8_t i)
 
 uint8_t CalGetDayLetter(uint8_t i)
 {
-  return i%4+65;
+  return i%5+65;
 }
 
 uint8_t BSGetBegHour( BellSched *BS, uint8_t P)
@@ -849,6 +850,14 @@ uint32_t BSGetDCol( BellSched *BS, uint8_t P)
 {
   uint16_t offset=P*sizeof(Period);
   offset += offsetof(Period,dCol);
+  offset += sizeof(uint8_t); //NumPeriods
+  return pgm_read_dword((char*)BS+offset);
+}
+
+uint32_t BSGetECol( BellSched *BS, uint8_t P)
+{
+  uint16_t offset=P*sizeof(Period);
+  offset += offsetof(Period,eCol);
   offset += sizeof(uint8_t); //NumPeriods
   return pgm_read_dword((char*)BS+offset);
 }

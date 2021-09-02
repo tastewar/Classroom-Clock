@@ -14,7 +14,7 @@
     of the period approaches
   - rainbows during lunch and Assembly, pulses after school...
   And so much more! Add your own functions to make School Clock
-  even cooler!
+  even cooler.
 
 */
 /////////////////////////////////////////////////////////
@@ -100,14 +100,16 @@ enum DayTypes
 // COLOR CONSTANTS
 /////////////////////////////////////////////////////////
 #define RED          0x00FF0000
+#define PINK         0x00FF0080
 #define GREEN        0x0000FF00
 #define BLUE         0x000000FF
 #define PURPLE       0x00800080
 #define YELLOW       0x00FFFF00
 #define ORANGE       0x00FFA500
-#define LUNCH        ORANGE
-#define ASPIRE       ORANGE
-#define OUTOFCLUSTER ORANGE
+#define CYAN         0x0000FFFF
+#define CHARTREUSE   0x0080FF00
+#define LUNCH        CYAN
+#define ASPIRE       CHARTREUSE
 
 /////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////
@@ -124,10 +126,9 @@ typedef struct _Period
   uint32_t bCol;
   uint32_t cCol;
   uint32_t dCol;
-  uint32_t eCol;
 } Period;
 
-#define MAX_PERIODS 10
+#define MAX_PERIODS 11
 typedef struct _BellSched
 {
   uint8_t NumPeriods;
@@ -142,9 +143,9 @@ typedef struct _SingleDay
   const BellSched*  dayType;
 } SingleDay;
 
-#include "Schedules202021.h"
+#include "Schedules202122.h"
 
-#include "Calendar202021.h"
+#include "Calendar202122.h"
 
 const uint8_t DayCount = sizeof(TheCalendar)/sizeof(SingleDay);
 uint8_t Today = 255;
@@ -638,7 +639,7 @@ uint32_t getLetterColor()
   if ( Today == TODAY_IS_A_HOLIDAY || Today == TODAY_IS_A_WEEKEND ) return 0;
   else
   {
-    uint8_t dl=Today%5;
+    uint8_t dl=Today%4;
     switch(dl)
     {
       case 0:
@@ -787,7 +788,7 @@ BellSched *CalGetDayType(uint8_t i)
 
 uint8_t CalGetDayLetter(uint8_t i)
 {
-  return i%5+65;
+  return i%4+65;
 }
 
 uint8_t BSGetBegHour( BellSched *BS, uint8_t P)
@@ -850,14 +851,6 @@ uint32_t BSGetDCol( BellSched *BS, uint8_t P)
 {
   uint16_t offset=P*sizeof(Period);
   offset += offsetof(Period,dCol);
-  offset += sizeof(uint8_t); //NumPeriods
-  return pgm_read_dword((char*)BS+offset);
-}
-
-uint32_t BSGetECol( BellSched *BS, uint8_t P)
-{
-  uint16_t offset=P*sizeof(Period);
-  offset += offsetof(Period,eCol);
   offset += sizeof(uint8_t); //NumPeriods
   return pgm_read_dword((char*)BS+offset);
 }

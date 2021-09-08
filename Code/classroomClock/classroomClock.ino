@@ -100,14 +100,14 @@ enum DayTypes
 // COLOR CONSTANTS
 /////////////////////////////////////////////////////////
 #define RED          0x00FF0000
-#define PINK         0x00FF0080
+#define PINK         0x00280028
 #define GREEN        0x0000FF00
 #define BLUE         0x000000FF
 #define PURPLE       0x00800080
 #define YELLOW       0x00FFFF00
 #define ORANGE       0x00FFA500
-#define CYAN         0x0000FFFF
-#define CHARTREUSE   0x0080FF00
+#define CYAN         0x000040FF
+#define CHARTREUSE   0x00101010
 #define LUNCH        CYAN
 #define ASPIRE       CHARTREUSE
 

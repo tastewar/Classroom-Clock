@@ -54,13 +54,13 @@ const PROGMEM BellSched ER1145=
 {
   7,
   {
-    { 8,30, 8,56, RED,          CHARTREUSE,   RED,          CHARTREUSE},
-    { 8,58, 9,24, YELLOW,       RED,          CHARTREUSE,   YELLOW},
-    { 9,26, 9,52, CHARTREUSE,   YELLOW,       YELLOW,       RED},
-    { 9,54,10,20, GREEN,        GREEN,        GREEN,        GREEN},
-    {10,22,10,48, BLUE,         PURPLE,       CHARTREUSE,   BLUE},
-    {10,50,11,16, PURPLE,       CHARTREUSE,   BLUE,         CHARTREUSE},
-    {11,18,11,45, CHARTREUSE,   BLUE,         PURPLE,       PURPLE},
+    { 8,30, 8,56, RED,          ORANGE,       YELLOW,       GREEN},
+    { 8,58, 9,24, ORANGE,       YELLOW,       GREEN,        RED},
+    { 9,26, 9,52, YELLOW,       GREEN,        RED,          ORANGE},
+    { 9,54,10,20, GREEN,        RED,          ORANGE,       YELLOW},
+    {10,22,10,48, BLUE,         PINK,         BLUE,         PURPLE},
+    {10,50,11,16, PURPLE,       BLUE,         PINK,         PINK},
+    {11,18,11,45, PINK,         PURPLE,       PURPLE,       BLUE},
   }
 };
 
@@ -68,13 +68,13 @@ const PROGMEM BellSched ER12=
 {
   7,
   {
-    { 8,30, 9, 3, RED,          CHARTREUSE,   RED,          CHARTREUSE},
-    { 9, 5, 9,38, YELLOW,       RED,          CHARTREUSE,   YELLOW},
-    { 9,40,10,13, CHARTREUSE,   YELLOW,       YELLOW,       RED},
-    {10,15,10,48, GREEN,        GREEN,        GREEN,        GREEN},
-    {10,50,11,22, BLUE,         PURPLE,       CHARTREUSE,   BLUE},
-    {11,24,11,56, PURPLE,       CHARTREUSE,   BLUE,         CHARTREUSE},
-    {11,58,12,30, CHARTREUSE,   BLUE,         PURPLE,       PURPLE},
+    { 8,30, 8,58, RED,          ORANGE,       YELLOW,       GREEN},
+    { 9, 0, 9,28, ORANGE,       YELLOW,       GREEN,        RED},
+    { 9,30, 9,58, YELLOW,       GREEN,        RED,          ORANGE},
+    {10, 0,10,28, GREEN,        RED,          ORANGE,       YELLOW},
+    {10,30,10,58, BLUE,         PINK,         BLUE,         PURPLE},
+    {11, 0,11,28, PURPLE,       BLUE,         PINK,         PINK},
+    {11,30,12, 0, PINK,         PURPLE,       PURPLE,       BLUE},
   }
 };
 

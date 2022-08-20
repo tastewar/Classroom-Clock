@@ -22,7 +22,7 @@
 #include "classroomClock.h"
 #include <Wire.h>
 #include <SPI.h>
-#include "RTClib.h"               // https://github.com/adafruit/RTClib
+#include <RTClib.h>               // https://github.com/adafruit/RTClib
 #include <Adafruit_NeoPixel.h>    // https://github.com/adafruit/Adafruit_NeoPixel
 
 #define NEOPIXEL_PIN 3
@@ -143,9 +143,9 @@ typedef struct _SingleDay
   const BellSched*  dayType;
 } SingleDay;
 
-#include "Schedules202122.h"
+#include "Schedules202223.h"
 
-#include "Calendar202122.h"
+#include "Calendar202223.h"
 
 const uint8_t DayCount = sizeof(TheCalendar)/sizeof(SingleDay);
 uint8_t Today = 255;

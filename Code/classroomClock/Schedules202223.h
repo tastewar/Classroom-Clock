@@ -1,18 +1,8 @@
 const PROGMEM BellSched FirstDay=
 {
-  11,
+  1,
   {
-    { 8,30, 9,30, ASPIRE,       ASPIRE,       ASPIRE,       ASPIRE},
-    { 9,32,10, 8, RED,          RED,          RED,          RED},
-    {10,10,10,46, ORANGE,       ORANGE,       ORANGE,       ORANGE},
-    {10,48,11,24, YELLOW,       YELLOW,       YELLOW,       YELLOW},
-    {11,26,12, 2, GREEN,        GREEN,        GREEN,        GREEN},
-    {12,04,12,26, BLUE,         BLUE,         BLUE,         BLUE},
-    {12,30,12,52, BLUE,         BLUE,         BLUE,         BLUE},
-    {12,54,13,16, LUNCH,        LUNCH,        LUNCH,        LUNCH},
-    {13,18,13,50, PURPLE,       PURPLE,       PURPLE,       PURPLE},
-    {13,52,14,24, PINK,         PINK,         PINK,         PINK},
-    {14,26,14,56, ASPIRE,       ASPIRE,       ASPIRE,       ASPIRE},
+    { 8,30,14,56, ASPIRE,       ASPIRE,       ASPIRE,       ASPIRE},
   }
 };
 

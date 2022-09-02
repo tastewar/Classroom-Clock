@@ -25,16 +25,15 @@ const PROGMEM BellSched SecondDay=
 
 const PROGMEM BellSched NormalDay=
 {
-  10,
+  9,
   {
     { 8,30, 9,20, RED,          ORANGE,       YELLOW,       GREEN},
     { 9,22,10,10, ORANGE,       YELLOW,       GREEN,        RED},
     {10,12,10,22, ASPIRE,       ASPIRE,       ASPIRE,       ASPIRE},
     {10,24,11,12, YELLOW,       GREEN,        RED,          ORANGE},
     {11,14,12, 2, GREEN,        RED,          ORANGE,       YELLOW},
-    {12, 4,12,26, BLUE,         PINK,         BLUE,         LUNCH},
-    {12,30,12,52, BLUE,         LUNCH,        BLUE,         LUNCH},
-    {12,54,13,16, LUNCH,        PINK,         LUNCH,        LUNCH},
+    {12, 4,12,28, LUNCH,        LUNCH,        LUNCH,        LUNCH},
+    {12,30,13,16, BLUE,         PINK,         BLUE,         LUNCH},
     {13,18,14, 6, PURPLE,       BLUE,         PINK,         PINK},
     {14, 8,14,56, PINK,         PURPLE,       PURPLE,       BLUE},
   }
@@ -70,16 +69,15 @@ const PROGMEM BellSched ER1200=
 
 const PROGMEM BellSched ER1320=
 {
-  9,
+  8,
   {
-    { 8,30, 9, 1, RED,          ORANGE,       YELLOW,       GREEN},
-    { 9, 3, 9,34, ORANGE,       YELLOW,       GREEN,        RED},
-    { 9,36,10, 7, YELLOW,       GREEN,        RED,          ORANGE},
-    {10, 9,10,40, GREEN,        RED,          ORANGE,       YELLOW},
-    {10,42,11,13, BLUE,         PINK,         BLUE,         PURPLE},
-    {11,16,11,38, PURPLE,       BLUE,         PINK,         PINK},
-    {11,40,12, 2, PURPLE,       BLUE,         LUNCH,        LUNCH},
-    {12, 4,12,26, PURPLE,       LUNCH,        PINK,         PINK},
-    {12,29,13, 0, PINK,         PURPLE,       PURPLE,       BLUE},
+    { 8,30, 9, 0, RED,          ORANGE,       YELLOW,       GREEN},
+    { 9, 2, 9,30, ORANGE,       YELLOW,       GREEN,        RED},
+    { 9,32,10, 0, YELLOW,       GREEN,        RED,          ORANGE},
+    {10, 2,10,30, GREEN,        RED,          ORANGE,       YELLOW},
+    {10,32,11, 0, BLUE,         PINK,         BLUE,         PURPLE},
+    {11, 2,11,30, PURPLE,       BLUE,         PINK,         PINK},
+    {11,32,12,50, ASPIRE,       ASPIRE,       ASPIRE,       ASPIRE},
+    {12,52,13,20, PINK,         PURPLE,       PURPLE,       BLUE},
   }
 };

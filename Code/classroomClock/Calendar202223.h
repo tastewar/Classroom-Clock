@@ -10,7 +10,7 @@ const PROGMEM SingleDay TheCalendar[]=
   {2022,10,14,&NormalDay},    {2022,10,17,&NormalDay},    {2022,10,18,&NormalDay},    {2022,10,19,   &ER1320},    {2022,10,20,&NormalDay},
   {2022,10,21,&NormalDay},    {2022,10,24,&NormalDay},    {2022,10,25,&NormalDay},    {2022,10,26,&NormalDay},    {2022,10,27,&NormalDay},
   {2022,10,28,&NormalDay},    {2022,10,31,&NormalDay},    {2022,11, 1,&NormalDay},    {2022,11, 2,&NormalDay},    {2022,11, 3,&NormalDay},
-  {2022,11, 4,&NormalDay},    {2022,11, 7,&NormalDay},    {2022,11, 9,   &ER1145},    {2022,11,10,&NormalDay},    {2022,11,14,&NormalDay},
+  {2022,11, 4,&NormalDay},    {2022,11, 7,&NormalDay},    {2022,11, 9,  &ER1145B},    {2022,11,10,&NormalDay},    {2022,11,14,&NormalDay},
   {2022,11,15,&NormalDay},    {2022,11,16,&NormalDay},    {2022,11,17,&NormalDay},    {2022,11,18,&NormalDay},    {2022,11,21,&NormalDay},
   {2022,11,22,&NormalDay},    {2022,11,23,   &ER1200},    {2022,11,28,&NormalDay},    {2022,11,29,&NormalDay},    {2022,11,30,&NormalDay},
   {2022,12, 1,&NormalDay},    {2022,12, 2,&NormalDay},    {2022,12, 5,&NormalDay},    {2022,12, 6,&NormalDay},    {2022,12, 7,&NormalDay},

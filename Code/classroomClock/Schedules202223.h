@@ -53,6 +53,21 @@ const PROGMEM BellSched ER1145=
   }
 };
 
+const PROGMEM BellSched ER1145B=
+{
+  8,
+  {
+    { 8,30, 8,51, YELLOW,       GREEN,        RED,          ORANGE},
+    { 8,53, 9,15, GREEN,        RED,          ORANGE,       YELLOW},
+    { 9,17, 9,38, ASPIRE,       ASPIRE,       ASPIRE,       ASPIRE},
+    { 9,40,10, 1, RED,          ORANGE,       YELLOW,       GREEN},
+    {10, 3,10,35, ORANGE,       YELLOW,       GREEN,        RED},
+    {10,37,10,59, BLUE,         PINK,         BLUE,         PURPLE},
+    {11, 1,11,23, PINK,         PURPLE,       PURPLE,       BLUE},
+    {11,25,11,45, PURPLE,       BLUE,         PINK,         PINK},
+  }
+};
+
 const PROGMEM BellSched ER1200=
 {
   7,
@@ -69,16 +84,18 @@ const PROGMEM BellSched ER1200=
 
 const PROGMEM BellSched ER1320=
 {
-  8,
+  10,
   {
     { 8,30, 9, 0, RED,          ORANGE,       YELLOW,       GREEN},
-    { 9, 2, 9,30, ORANGE,       YELLOW,       GREEN,        RED},
-    { 9,32,10, 0, YELLOW,       GREEN,        RED,          ORANGE},
-    {10, 2,10,30, GREEN,        RED,          ORANGE,       YELLOW},
-    {10,32,11, 0, BLUE,         PINK,         BLUE,         PURPLE},
-    {11, 2,11,30, PURPLE,       BLUE,         PINK,         PINK},
-    {11,32,12,50, ASPIRE,       ASPIRE,       ASPIRE,       ASPIRE},
-    {12,52,13,20, PINK,         PURPLE,       PURPLE,       BLUE},
+    { 9, 2, 9,31, ORANGE,       YELLOW,       GREEN,        RED},
+    { 9,33,10, 2, YELLOW,       GREEN,        RED,          ORANGE},
+    {10, 4,10,33, GREEN,        RED,          ORANGE,       YELLOW},
+    {10,35,11, 4, BLUE,         PINK,         BLUE,         PURPLE},
+    {11, 6,11,35, PURPLE,       BLUE,         PINK,         PINK},
+    {11,37,12, 6, PINK,         PURPLE,       PURPLE,       BLUE},
+    {12, 8,12,30, ASPIRE,       ASPIRE,       ASPIRE,       ASPIRE},
+    {12,33,12,55, LUNCH,        LUNCH,        LUNCH,        LUNCH},
+    {12,58,13,20, ASPIRE,       ASPIRE,       ASPIRE,       ASPIRE},
   }
 };
 

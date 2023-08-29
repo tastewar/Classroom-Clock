@@ -16,6 +16,7 @@
   And so much more! Add your own functions to make School Clock
   even cooler.
 
+  - Set IDE to use Arduino Nano.
 */
 /////////////////////////////////////////////////////////
 
@@ -143,9 +144,9 @@ typedef struct _SingleDay
   const BellSched*  dayType;
 } SingleDay;
 
-#include "Schedules202223.h"
+#include "Schedules202324.h"
 
-#include "Calendar202223.h"
+#include "Calendar202324.h"
 
 const uint8_t DayCount = sizeof(TheCalendar)/sizeof(SingleDay);
 uint8_t Today = 255;

@@ -23,7 +23,7 @@ const PROGMEM SingleDay TheCalendar[]=
   {2024, 1,29,&NormalDay},    {2024, 1,30,&NormalDay},    {2024, 1,31,&NormalDay},    {2024, 2, 1,&NormalDay},    {2024, 2, 2,&NormalDay},  
   {2024, 2, 5,&NormalDay},    {2024, 2, 6,&NormalDay},    {2024, 2, 7,   &ER1320},    {2024, 2, 8,&NormalDay},    {2024, 2, 9,&NormalDay},  
   {2024, 2,12,&NormalDay},    {2024, 2,13,&NormalDay},    {2024, 2,14,&NormalDay},    {2024, 2,15,&NormalDay},    {2024, 2,16,&NormalDay},  
-  {2024, 2,26,&NormalDay},    {2024, 2,27,&NormalDay},    {2024, 2,29,&NormalDay},    {2023, 2, 1,&NormalDay},    {2024, 3, 1,&NormalDay},  
+  {2024, 2,26,&NormalDay},    {2024, 2,27,&NormalDay},    {2024, 2,28,&NormalDay},    {2024, 2,29,&NormalDay},    {2024, 3, 1,&NormalDay},  
   {2024, 3, 4,&NormalDay},    {2024, 3, 5,&NormalDay},    {2024, 3, 6,&NormalDay},    {2024, 3, 7,&NormalDay},    {2024, 3, 8,&NormalDay},  
   {2024, 3,11,&NormalDay},    {2024, 3,12,&NormalDay},    {2024, 3,13,&NormalDay},    {2024, 3,14,&NormalDay},    {2024, 3,15,&NormalDay},  
   {2024, 3,18,&NormalDay},    {2024, 3,19,&NormalDay},    {2024, 3,20,   &ER1320},    {2024, 3,21,&NormalDay},    {2024, 3,22,&NormalDay},  

@@ -144,9 +144,9 @@ typedef struct _SingleDay
   const BellSched*  dayType;
 } SingleDay;
 
-#include "Schedules202324.h"
+#include "Schedules202425.h"
 
-#include "Calendar202324.h"
+#include "Calendar202425.h"
 
 const uint8_t DayCount = sizeof(TheCalendar)/sizeof(SingleDay);
 uint8_t Today = 255;

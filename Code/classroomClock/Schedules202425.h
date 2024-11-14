@@ -86,15 +86,15 @@ const PROGMEM BellSched ER1320=
 {
   9,
   {
-    { 8,30, 9, 0, RED,          YELLOW,       YELLOW,       GREEN},
-    { 9, 2, 9,32, YELLOW,       GREEN,        GREEN,        RED},
-    { 9,34,10, 4, GREEN,        RED,          RED,          YELLOW},
-    {10, 6,10,36, PURPLE,       PINK,         PURPLE,       PINK},
-    {10,38,11, 8, PINK,         PURPLE,       PINK,         PURPLE},
-    {11,10,11,40, LUNCH,        LUNCH,        LUNCH,        LUNCH},
-    {11,42,12,12, ORANGE,       ORANGE,       ORANGE,       ORANGE},
-    {12,14,12,44, BLUE,         BLUE,         BLUE,         BLUE},
-    {12,46,13,20, ASPIRE,       ASPIRE,       ASPIRE,       ASPIRE},
+    { 8,30, 8,58, RED,          ORANGE,       YELLOW,       RED},
+    { 9, 0, 9,28, ORANGE,       YELLOW,       RED,          ORANGE},
+    { 9,30,10, 0, ASPIRE,       ASPIRE,       ASPIRE,       ASPIRE},
+    {10, 2,10,30, YELLOW,       RED,          ORANGE,       YELLOW},
+    {10,32,11, 0, PURPLE,       PINK,         PURPLE,       PINK},
+    {11, 2,11,30, PINK,         PURPLE,       PINK,         PURPLE},
+    {11,34,11,59, LUNCH,        LUNCH,        LUNCH,        LUNCH},
+    {12, 1,12,26, GREEN,        GREEN,        GREEN,        GREEN},
+    {12,28,13,20, BLUE,         BLUE,         BLUE,         BLUE},
   }
 };
 

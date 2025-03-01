@@ -1,8 +1,8 @@
 // days not present are either weekend days or holidays
 const PROGMEM SingleDay TheCalendar[]=
 {
-  {2024, 8,28,&NormalDay},    {2024, 8,29,&NormalDay},    {2024, 8,30,&NormalDay},    {2024, 9, 3,&NormalDay},    {2024, 9, 4, &FirstDay},  
-  {2024, 9, 5, &FirstDay},    {2024, 9, 6,&NormalDay},    {2024, 9, 9,&NormalDay},    {2024, 9,10,&NormalDay},    {2024, 9,11,&NormalDay},  
+  {2024, 8,28,&NormalDay},    {2024, 8,29,&NormalDay},    {2024, 8,30,&NormalDay},    {2024, 9, 3,&NormalDay},    {2024, 9, 4,&NormalDay},  
+  {2024, 9, 5,&NormalDay},    {2024, 9, 6,&NormalDay},    {2024, 9, 9,&NormalDay},    {2024, 9,10,&NormalDay},    {2024, 9,11,&NormalDay},  
   {2024, 9,12,&NormalDay},    {2024, 9,13,&NormalDay},    {2024, 9,16,&NormalDay},    {2024, 9,17,&NormalDay},    {2024, 9,18,&NormalDay},  
   {2024, 9,19,&NormalDay},    {2024, 9,20,&NormalDay},    {2024, 9,23,&NormalDay},    {2024, 9,24,&NormalDay},    {2024, 9,25,&NormalDay},  
   {2024, 9,26,&NormalDay},    {2024, 9,27,&NormalDay},    {2024, 9,30,&NormalDay},    {2024,10, 1,&NormalDay},    {2024,10, 2,&NormalDay},  
@@ -23,7 +23,7 @@ const PROGMEM SingleDay TheCalendar[]=
   {2025, 1,30,&NormalDay},    {2025, 1,31,&NormalDay},    {2025, 2, 3,&NormalDay},    {2025, 2, 4,&NormalDay},    {2025, 2, 5,   &ER1320},  
   {2025, 2, 6,&NormalDay},    {2025, 2, 7,&NormalDay},    {2025, 2,10,&NormalDay},    {2025, 2,11,&NormalDay},    {2025, 2,12,&NormalDay},  
   {2025, 2,13,&NormalDay},    {2025, 2,14,&NormalDay},    {2025, 2,24,&NormalDay},    {2025, 2,25,&NormalDay},    {2025, 2,26,&NormalDay},  
-  {2025, 2,29,&NormalDay},    {2023, 2, 1,&NormalDay},    {2025, 3, 3,&NormalDay},    {2025, 3, 4,&NormalDay},    {2025, 3, 5,&NormalDay},  
+  {2025, 2,27,&NormalDay},    {2025, 2,28,&NormalDay},    {2025, 3, 3,&NormalDay},    {2025, 3, 4,&NormalDay},    {2025, 3, 5,&NormalDay},  
   {2025, 3, 6,&NormalDay},    {2025, 3, 7,&NormalDay},    {2025, 3,10,&NormalDay},    {2025, 3,11,&NormalDay},    {2025, 3,12,&NormalDay},  
   {2025, 3,13,&NormalDay},    {2025, 3,14,&NormalDay},    {2025, 3,17,&NormalDay},    {2025, 3,18,&NormalDay},    {2025, 3,19,   &ER1320},  
   {2025, 3,20,&NormalDay},    {2025, 3,21,&NormalDay},    {2025, 3,24,&NormalDay},    {2025, 3,25,&NormalDay},    {2025, 3,26,&NormalDay},  

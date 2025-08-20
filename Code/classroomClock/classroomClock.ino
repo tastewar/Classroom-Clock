@@ -144,9 +144,8 @@ typedef struct _SingleDay
   const BellSched*  dayType;
 } SingleDay;
 
-#include "Schedules202425.h"
-
-#include "Calendar202425.h"
+#include "Schedules202526.h"
+#include "Calendar202526.h"
 
 const uint8_t DayCount = sizeof(TheCalendar)/sizeof(SingleDay);
 uint8_t Today = 255;
@@ -158,7 +157,7 @@ uint8_t Today = 255;
 
 
 // number of minutes before end of class when countdown clock is triggered
-uint8_t countdownM = 5;
+uint8_t countdownM = 2;
 uint8_t secBetweenFlashes = 4;
 
 /////////////////////////////////////////////////////////

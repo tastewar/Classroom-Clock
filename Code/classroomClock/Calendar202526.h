@@ -1,7 +1,7 @@
 // days not present are either weekend days or holidays
 const PROGMEM SingleDay TheCalendar[]=
 {
-  {2025, 8,27,&NormalDay},    {2025, 8,28,&NormalDay},    {2025, 8,29,&NormalDay},    {2025, 9, 2,&NormalDay},    {2025, 9, 3,&NormalDay},  
+  {2025, 9, 2,&NormalDay},    {2025, 9, 3,&NormalDay},  
   {2025, 9, 4,&NormalDay},    {2025, 9, 5,&NormalDay},    {2025, 9, 8,&NormalDay},    {2025, 9, 9,&NormalDay},    {2025, 9,10,&NormalDay},  
   {2025, 9,11,&NormalDay},    {2025, 9,12,&NormalDay},    {2025, 9,15,&NormalDay},    {2025, 9,16,&NormalDay},    {2025, 9,17,&NormalDay},  
   {2025, 9,18,&NormalDay},    {2025, 9,19,&NormalDay},    {2025, 9,22,&NormalDay},    {2025, 9,24,&NormalDay},    {2025, 9,25,&NormalDay},  

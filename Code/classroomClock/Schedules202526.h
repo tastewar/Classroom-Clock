@@ -53,21 +53,6 @@ const PROGMEM BellSched ER1145=
   }
 };
 
-const PROGMEM BellSched ER1145B=
-{
-  8,
-  {
-    { 8,30, 8,51, YELLOW,       GREEN,        RED,          ORANGE},
-    { 8,53, 9,15, GREEN,        RED,          ORANGE,       YELLOW},
-    { 9,17, 9,38, ASPIRE,       ASPIRE,       ASPIRE,       ASPIRE},
-    { 9,40,10, 1, RED,          ORANGE,       YELLOW,       GREEN},
-    {10, 3,10,35, ORANGE,       YELLOW,       GREEN,        RED},
-    {10,37,10,59, BLUE,         PINK,         BLUE,         PURPLE},
-    {11, 1,11,23, PINK,         PURPLE,       PURPLE,       BLUE},
-    {11,25,11,45, PURPLE,       BLUE,         PINK,         PINK},
-  }
-};
-
 const PROGMEM BellSched ER1200=
 {
   7,
@@ -87,28 +72,13 @@ const PROGMEM BellSched ER1320=
   9,
   {
     { 8,30, 8,58, RED,          ORANGE,       YELLOW,       RED},
-    { 9, 0, 9,28, ORANGE,       YELLOW,       RED,          ORANGE},
+    { 9, 0, 9,28, ORANGE,       YELLOW,       GREEN,        ORANGE},
     { 9,30,10, 0, ASPIRE,       ASPIRE,       ASPIRE,       ASPIRE},
-    {10, 2,10,30, YELLOW,       RED,          ORANGE,       YELLOW},
+    {10, 2,10,30, YELLOW,       GREEN,        RED,          YELLOW},
     {10,32,11, 0, PURPLE,       PINK,         PURPLE,       PINK},
-    {11, 2,11,30, PINK,         PURPLE,       PINK,         PURPLE},
-    {11,34,11,59, LUNCH,        LUNCH,        LUNCH,        LUNCH},
-    {12, 1,12,26, GREEN,        GREEN,        GREEN,        GREEN},
+    {11, 2,11,28, PINK,         PURPLE,       PINK,         PURPLE},
+    {11,30,11,52, LUNCH,        LUNCH,        LUNCH,        LUNCH},
+    {11,54,12,26, GREEN,        RED,          ORANGE,       GREEN},
     {12,28,13,20, BLUE,         BLUE,         BLUE,         BLUE},
-  }
-};
-
-const PROGMEM BellSched ER1320a=
-{
-  8,
-  {
-    { 8,30, 9, 5, RED,          ORANGE,       YELLOW,       GREEN},
-    { 9, 7, 9,42, ORANGE,       YELLOW,       GREEN,        RED},
-    { 9,44,10,19, YELLOW,       GREEN,        RED,          ORANGE},
-    {10,21,10,55, GREEN,        RED,          ORANGE,       YELLOW},
-    {10,57,11,30, BLUE,         PINK,         BLUE,         PURPLE},
-    {11,32,11,54, LUNCH,        LUNCH,        LUNCH,        LUNCH},
-    {11,56,12,43, PURPLE,       BLUE,         PINK,         PINK},
-    {12,45,13,20, PINK,         PURPLE,       PURPLE,       BLUE},
   }
 };

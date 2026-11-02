@@ -25,6 +25,7 @@
 #include <SPI.h>
 #include <RTClib.h>               // https://github.com/adafruit/RTClib
 #include <Adafruit_NeoPixel.h>    // https://github.com/adafruit/Adafruit_NeoPixel
+#include "timedefs.h"
 
 #define NEOPIXEL_PIN 3
 #define NUM_PIXELS 32
@@ -144,8 +145,8 @@ typedef struct _SingleDay
   const BellSched*  dayType;
 } SingleDay;
 
-#include "Schedules202627.h"
-#include "Calendar202627.h"
+#include "CurrentSchedules.h"
+#include "CurrentCalendar.h"
 
 const uint8_t DayCount = sizeof(TheCalendar)/sizeof(SingleDay);
 uint8_t Today = 255;
@@ -169,15 +170,11 @@ void setup()
   #ifdef DEBUG
   Serial.begin(9600);
   #endif
-  /*
-   * For testing purposes, you can set the clock to custom values, e.g.:
-   * initChronoDot(year, month, day, hour, minute, seconds);
-   * Otherwise, the clock automatically sets itself to your computer's
-   * time with the function initChronoDot();
-  */
-  //initChronoDot(2019, 1, 15, 7, 56, 50);
+  // The RTC must be set to UTC with the dedicated time-setting sketch.
+  // For debugging, initChronoDot(y, mon, d, h, min, sec) also sets UTC.
+  //initChronoDot(2026, 11, 2, 14, 0, 0);
   initChronoDot();
-  now = RTC.now();
+  now = getSoftwareTime();
   DoNewDayStuff();
   DeterminePeriod();
   DoNewMinuteStuff();
@@ -187,7 +184,7 @@ void setup()
 
 void loop()
 {
-  now = RTC.now();
+  now = getSoftwareTime();
   if(now.minute()!=currentMinute)
   {
     // let's figure out all the interesting state info on the new minute boundary
@@ -710,6 +707,29 @@ void initChronoDot()
   // I think it is better to have a dedicated sketch for setting the clock
 }
 
+// Read UTC from the RTC and return the time used by the clock, schedule,
+// and display. DST dates are month/day values for the current school year;
+// the interval wraps across New Year's Day.
+DateTime getSoftwareTime()
+{
+  DateTime utcNow = RTC.now();
+
+  // Use standard local time to decide whether this date is in DST. This
+  // keeps the DST boundary independent of the offset being applied below.
+  int32_t standardOffset = (int32_t)GMT_OFFSET_HOURS * 3600L;
+  DateTime standardLocal((uint32_t)((int32_t)utcNow.unixtime() + standardOffset));
+  uint16_t monthDay = standardLocal.month() * 100 + standardLocal.day();
+  uint16_t dstBegin = DST_BEGIN_MONTH * 100 + DST_BEGIN_DAY;
+  uint16_t dstEnd = DST_END_MONTH * 100 + DST_END_DAY;
+  bool isDst = monthDay >= dstBegin || monthDay < dstEnd;
+
+  // A positive bell offset means the displayed/schedule time lags wall time.
+  int32_t totalOffset = standardOffset - BELL_SECONDS_OFFSET;
+  if (isDst) totalOffset += 3600L;
+
+  return DateTime((uint32_t)((int32_t)utcNow.unixtime() + totalOffset));
+}
+
 // Use this function to set a specific initial DateTime
 // useful for debugging
 void initChronoDot(int y, int mon, int d, int h, int minu, int s)
@@ -724,9 +744,9 @@ void initChronoDot(int y, int mon, int d, int h, int minu, int s)
      Serial.println("RTC is NOT running");
      #endif
   }
-  now = RTC.now();
+  now = getSoftwareTime();
   RTC.adjust(DateTime(y, mon, d, h, minu, s));
-  now = RTC.now();
+  now = getSoftwareTime();
   #ifdef DEBUG
   Serial.println("Setup complete.");
   #endif

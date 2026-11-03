@@ -1,10 +1,10 @@
 #ifndef TIMEDEFS_H
 #define TIMEDEFS_H
 
-// Standard local time is GMT-6. DST adds one hour between the configured
+// Standard Eastern Time is GMT-5. DST adds one hour between the configured
 // spring and fall dates. Each transition takes effect at midnight local time.
 // Set these month/day values for each school year.
-#define GMT_OFFSET_HOURS -6
+#define GMT_OFFSET_HOURS -5
 #define DST_BEGIN_MONTH 3
 #define DST_BEGIN_DAY 14
 #define DST_END_MONTH 11

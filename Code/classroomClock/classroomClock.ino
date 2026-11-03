@@ -25,6 +25,8 @@
 #include <SPI.h>
 #include <RTClib.h>               // https://github.com/adafruit/RTClib
 #include <Adafruit_NeoPixel.h>    // https://github.com/adafruit/Adafruit_NeoPixel
+#include <EEPROM.h>
+#include <stdlib.h>
 #include "timedefs.h"
 
 #define NEOPIXEL_PIN 3
@@ -42,6 +44,29 @@ DateTime now;
 uint8_t currentMinute = 60;
 uint8_t currentPeriod = 0;
 uint8_t currentDay = 0;
+int16_t bellSecondsOffset = BELL_SECONDS_OFFSET;
+
+enum SerialSetupState
+{
+  ssMenu,
+  ssTimeYear,
+  ssTimeMonth,
+  ssTimeDay,
+  ssTimeHour,
+  ssTimeMinute,
+  ssTimeSecond,
+  ssTimeConfirm,
+  ssBellOffset,
+  ssBellConfirm
+} serialSetupState = ssMenu;
+
+const uint8_t SERIAL_INPUT_BUFFER_SIZE = 24;
+char serialInputBuffer[SERIAL_INPUT_BUFFER_SIZE];
+uint8_t serialInputLength = 0;
+bool serialInputOverflow = false;
+uint16_t enteredYear;
+uint8_t enteredMonth, enteredDay, enteredHour, enteredMinute, enteredSecond;
+int16_t pendingBellSecondsOffset;
 
 ////////////////////////////////////////////////////////
 //// CLOCK ADJUSTMENTS
@@ -167,12 +192,8 @@ uint8_t secBetweenFlashes = 4;
 /////////////////////////////////////////////////////////
 void setup()
 {
-  #ifdef DEBUG
   Serial.begin(9600);
-  #endif
-  // The RTC must be set to UTC with the dedicated time-setting sketch.
-  // For debugging, initChronoDot(y, mon, d, h, min, sec) also sets UTC.
-  //initChronoDot(2026, 11, 2, 14, 0, 0);
+  loadBellOffset();
   initChronoDot();
   now = getSoftwareTime();
   DoNewDayStuff();
@@ -180,6 +201,7 @@ void setup()
   DoNewMinuteStuff();
   strip.begin();
   strip.show();
+  showSerialMenu();
 }
 
 void loop()
@@ -192,6 +214,282 @@ void loop()
     else DoNewMinuteStuff();
   }
   displayClock();
+  handleSerialInput();
+}
+
+void showSerialMenu()
+{
+  Serial.println();
+  Serial.println(F("Classroom Clock setup: Set time (T) or change bell offset (B)?"));
+  Serial.println(F("Enter T, B, or ? for this menu."));
+}
+
+void returnToSerialMenu()
+{
+  serialSetupState = ssMenu;
+  showSerialMenu();
+}
+
+void promptForTimeField()
+{
+  switch (serialSetupState)
+  {
+    case ssTimeYear:   Serial.println(F("Enter UTC/GMT year (2000-2099):")); break;
+    case ssTimeMonth:  Serial.println(F("Enter UTC/GMT month (1-12):")); break;
+    case ssTimeDay:    Serial.println(F("Enter UTC/GMT day of month:")); break;
+    case ssTimeHour:   Serial.println(F("Enter UTC/GMT hour, 24-hour clock (0-23):")); break;
+    case ssTimeMinute: Serial.println(F("Enter UTC/GMT minute (0-59):")); break;
+    case ssTimeSecond: Serial.println(F("Enter UTC/GMT second (0-59):")); break;
+  }
+}
+
+void startTimeSetting()
+{
+  serialSetupState = ssTimeYear;
+  Serial.println(F("Set the hardware RTC to GMT/UTC."));
+  promptForTimeField();
+}
+
+void startBellOffsetSetting()
+{
+  serialSetupState = ssBellOffset;
+  Serial.print(F("Current bell offset: "));
+  Serial.print(bellSecondsOffset);
+  Serial.println(F(" seconds."));
+  Serial.println(F("Enter signed seconds (-3600 to 3600). Positive = clock behind real time; negative = clock ahead:"));
+}
+
+bool parseSerialInteger(int32_t &value)
+{
+  char *end;
+  long parsed = strtol(serialInputBuffer, &end, 10);
+  while (*end == ' ' || *end == '\t') end++;
+  if (end == serialInputBuffer || *end != '\0') return false;
+  value = (int32_t)parsed;
+  return true;
+}
+
+uint8_t daysInMonth(uint16_t year, uint8_t month)
+{
+  const uint8_t monthDays[] = {31,28,31,30,31,30,31,31,30,31,30,31};
+  if (month == 2 && (year % 400 == 0 || (year % 4 == 0 && year % 100 != 0))) return 29;
+  return monthDays[month - 1];
+}
+
+void refreshClockState()
+{
+  now = getSoftwareTime();
+  DoNewDayStuff();
+  DeterminePeriod();
+  DoNewMinuteStuff();
+}
+
+void loadBellOffset()
+{
+  struct BellOffsetStorage
+  {
+    uint16_t marker;
+    int16_t seconds;
+  } saved;
+
+  EEPROM.get(0, saved);
+  if (saved.marker == 0xB311 && saved.seconds >= -3600 && saved.seconds <= 3600)
+    bellSecondsOffset = saved.seconds;
+  else
+    bellSecondsOffset = BELL_SECONDS_OFFSET;
+}
+
+void saveBellOffset()
+{
+  struct BellOffsetStorage
+  {
+    uint16_t marker;
+    int16_t seconds;
+  } saved;
+
+  saved.marker = 0xB311;
+  saved.seconds = bellSecondsOffset;
+  EEPROM.put(0, saved);
+}
+
+void processSerialLine()
+{
+  int32_t value;
+  bool valid;
+
+  if (serialSetupState == ssMenu)
+  {
+    if (serialInputBuffer[1] != '\0')
+    {
+      Serial.println(F("Enter T, B, or ?."));
+      return;
+    }
+    char command = serialInputBuffer[0];
+    if (command >= 'a' && command <= 'z') command -= ('a' - 'A');
+    if (command == 'T') startTimeSetting();
+    else if (command == 'B') startBellOffsetSetting();
+    else if (command == '?') showSerialMenu();
+    else Serial.println(F("Enter T, B, or ?."));
+    return;
+  }
+
+  if (serialSetupState == ssTimeConfirm || serialSetupState == ssBellConfirm)
+  {
+    char answer = serialInputBuffer[0];
+    if (answer >= 'a' && answer <= 'z') answer -= ('a' - 'A');
+    if (serialInputBuffer[1] != '\0' || (answer != 'Y' && answer != 'N'))
+    {
+      Serial.println(F("Enter Y to confirm or N to cancel:"));
+      return;
+    }
+
+    if (answer == 'N')
+    {
+      Serial.println(F("Change canceled."));
+      returnToSerialMenu();
+      return;
+    }
+
+    if (serialSetupState == ssTimeConfirm)
+    {
+      RTC.adjust(DateTime(enteredYear, enteredMonth, enteredDay,
+                          enteredHour, enteredMinute, enteredSecond));
+      Serial.println(F("RTC set to UTC."));
+    }
+    else
+    {
+      bellSecondsOffset = pendingBellSecondsOffset;
+      saveBellOffset();
+      Serial.println(F("Bell offset saved to EEPROM."));
+    }
+    refreshClockState();
+    returnToSerialMenu();
+    return;
+  }
+
+  valid = parseSerialInteger(value);
+  switch (serialSetupState)
+  {
+    case ssTimeYear:
+      if (valid && value >= 2000 && value <= 2099)
+      {
+        enteredYear = value;
+        serialSetupState = ssTimeMonth;
+      }
+      else Serial.println(F("Year must be from 2000 to 2099."));
+      break;
+    case ssTimeMonth:
+      if (valid && value >= 1 && value <= 12)
+      {
+        enteredMonth = value;
+        serialSetupState = ssTimeDay;
+      }
+      else Serial.println(F("Month must be from 1 to 12."));
+      break;
+    case ssTimeDay:
+      if (valid && value >= 1 && value <= daysInMonth(enteredYear, enteredMonth))
+      {
+        enteredDay = value;
+        serialSetupState = ssTimeHour;
+      }
+      else Serial.println(F("That day is not valid for the selected month."));
+      break;
+    case ssTimeHour:
+      if (valid && value >= 0 && value <= 23)
+      {
+        enteredHour = value;
+        serialSetupState = ssTimeMinute;
+      }
+      else Serial.println(F("Hour must be from 0 to 23."));
+      break;
+    case ssTimeMinute:
+      if (valid && value >= 0 && value <= 59)
+      {
+        enteredMinute = value;
+        serialSetupState = ssTimeSecond;
+      }
+      else Serial.println(F("Minute must be from 0 to 59."));
+      break;
+    case ssTimeSecond:
+      if (valid && value >= 0 && value <= 59)
+      {
+        enteredSecond = value;
+        serialSetupState = ssTimeConfirm;
+        Serial.print(F("Set RTC to "));
+        Serial.print(enteredYear); Serial.print('-');
+        Serial.print(enteredMonth); Serial.print('-');
+        Serial.print(enteredDay); Serial.print(' ');
+        Serial.print(enteredHour); Serial.print(':');
+        Serial.print(enteredMinute); Serial.print(':');
+        Serial.print(enteredSecond); Serial.println(F(" UTC? Enter Y or N:"));
+        return;
+      }
+      else Serial.println(F("Second must be from 0 to 59."));
+      break;
+    case ssBellOffset:
+      if (valid && value >= -3600 && value <= 3600)
+      {
+        pendingBellSecondsOffset = value;
+        serialSetupState = ssBellConfirm;
+        Serial.print(F("Save "));
+        Serial.print(pendingBellSecondsOffset);
+        Serial.print(F(" seconds. The clock will run "));
+        if (pendingBellSecondsOffset > 0) Serial.print(F("behind"));
+        else if (pendingBellSecondsOffset < 0) Serial.print(F("ahead of"));
+        else Serial.print(F("with"));
+        Serial.println(F(" real time. Enter Y or N:"));
+        return;
+      }
+      else Serial.println(F("Offset must be from -3600 to 3600 seconds."));
+      break;
+  }
+  promptForTimeField();
+  if (serialSetupState == ssBellOffset)
+    Serial.println(F("Enter signed seconds (-3600 to 3600):"));
+}
+
+void handleSerialInput()
+{
+  while (Serial.available() > 0)
+  {
+    char c = Serial.read();
+    if (c == '\r' || c == '\n')
+    {
+      if (serialInputOverflow || serialInputLength > 0)
+      {
+        Serial.println();
+        if (serialInputOverflow)
+          Serial.println(F("Input too long; please try again."));
+        else
+        {
+          serialInputBuffer[serialInputLength] = '\0';
+          processSerialLine();
+        }
+      }
+      serialInputLength = 0;
+      serialInputOverflow = false;
+    }
+    else if (c == '\b' || c == 127)
+    {
+      if (serialInputLength > 0)
+      {
+        serialInputLength--;
+        Serial.write('\b');
+        Serial.write(' ');
+        Serial.write('\b');
+      }
+    }
+    else if (!serialInputOverflow)
+    {
+      if (serialInputLength < SERIAL_INPUT_BUFFER_SIZE - 1)
+      {
+        serialInputBuffer[serialInputLength++] = c;
+        if (c >= 32 && c <= 126) Serial.write(c);
+      }
+      else
+        serialInputOverflow = true;
+    }
+  }
 }
 
 void DeterminePeriod()
@@ -695,16 +993,12 @@ uint32_t Wheel(byte WheelPos)
 /////////////////////////////////////////////////////////
 // GET/SET
 /////////////////////////////////////////////////////////
-// credit: Adafruit
-// Use this function to automatically set an initial DateTime
-// using time from the computer/ compiler
+// Initialize the RTC hardware. The clock's serial menu can set its time to UTC.
 void initChronoDot()
 {
   // Instantiate the RTC
   Wire.begin();
   RTC.begin();
-  // I have removed the conditional clock setting code from here.
-  // I think it is better to have a dedicated sketch for setting the clock
 }
 
 // Read UTC from the RTC and return the time used by the clock, schedule,
@@ -721,10 +1015,10 @@ DateTime getSoftwareTime()
   uint16_t monthDay = standardLocal.month() * 100 + standardLocal.day();
   uint16_t dstBegin = DST_BEGIN_MONTH * 100 + DST_BEGIN_DAY;
   uint16_t dstEnd = DST_END_MONTH * 100 + DST_END_DAY;
-  bool isDst = monthDay >= dstBegin || monthDay < dstEnd;
+  bool isDst = monthDay >= dstBegin && monthDay < dstEnd;
 
   // A positive bell offset means the displayed/schedule time lags wall time.
-  int32_t totalOffset = standardOffset - BELL_SECONDS_OFFSET;
+  int32_t totalOffset = standardOffset - bellSecondsOffset;
   if (isDst) totalOffset += 3600L;
 
   return DateTime((uint32_t)((int32_t)utcNow.unixtime() + totalOffset));

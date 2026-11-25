@@ -43,13 +43,13 @@ const PROGMEM BellSched ER1145=
 {
   7,
   {
-    { 8,30, 8,56, RED,          ORANGE,       YELLOW,       GREEN},
-    { 8,58, 9,24, ORANGE,       YELLOW,       GREEN,        RED},
-    { 9,26, 9,52, YELLOW,       GREEN,        RED,          ORANGE},
-    { 9,54,10,20, GREEN,        RED,          ORANGE,       YELLOW},
-    {10,22,10,48, BLUE,         BLUE,         BLUE,         BLUE},
-    {10,50,11,16, PURPLE,       PINK,         PURPLE,       PINK},
-    {11,18,11,45, PINK,         PURPLE,       PINK,         PURPLE},
+    { 8,30, 8,58, RED,          ORANGE,       YELLOW,       GREEN},
+    { 9, 0, 9,26, ORANGE,       YELLOW,       GREEN,        RED},
+    { 9,28, 9,54, YELLOW,       GREEN,        RED,          ORANGE},
+    { 9,56,10,22, GREEN,        RED,          ORANGE,       YELLOW},
+    {10,24,10,50, BLUE,         BLUE,         BLUE,         BLUE},
+    {10,52,11,18, PURPLE,       PINK,         PURPLE,       PINK},
+    {11,20,11,45, PINK,         PURPLE,       PINK,         PURPLE},
   }
 };
 
@@ -57,13 +57,13 @@ const PROGMEM BellSched ER1200=
 {
   7,
   {
-    { 8,30, 8,58, RED,          ORANGE,       YELLOW,       GREEN},
-    { 9, 0, 9,28, ORANGE,       YELLOW,       GREEN,        RED},
-    { 9,30, 9,58, YELLOW,       GREEN,        RED,          ORANGE},
-    {10, 0,10,28, GREEN,        RED,          ORANGE,       YELLOW},
-    {10,30,10,58, BLUE,         BLUE,         BLUE,         BLUE},
-    {11, 0,11,28, PURPLE,       PINK,         PURPLE,       PINK},
-    {11,30,12, 0, PINK,         PURPLE,       PINK,         PURPLE},
+    { 8,30, 9, 0, RED,          ORANGE,       YELLOW,       GREEN},
+    { 9, 2, 9,30, ORANGE,       YELLOW,       GREEN,        RED},
+    { 9,32,10, 0, YELLOW,       GREEN,        RED,          ORANGE},
+    {10, 2,10,30, GREEN,        RED,          ORANGE,       YELLOW},
+    {10,32,11, 0, BLUE,         BLUE,         BLUE,         BLUE},
+    {11, 2,11,30, PURPLE,       PINK,         PURPLE,       PINK},
+    {11,32,12, 0, PINK,         PURPLE,       PINK,         PURPLE},
   }
 };
 

@@ -56,7 +56,8 @@ enum SerialSetupState
   ssTimeMinute,
   ssTimeSecond,
   ssTimeConfirm,
-  ssBellOffset,
+  ssBellDirection,
+  ssBellDelta,
   ssBellConfirm
 } serialSetupState = ssMenu;
 
@@ -67,6 +68,7 @@ bool serialInputOverflow = false;
 uint16_t enteredYear;
 uint8_t enteredMonth, enteredDay, enteredHour, enteredMinute, enteredSecond;
 int16_t pendingBellSecondsOffset;
+char bellClockDirection;
 
 ////////////////////////////////////////////////////////
 //// CLOCK ADJUSTMENTS
@@ -252,11 +254,11 @@ void startTimeSetting()
 
 void startBellOffsetSetting()
 {
-  serialSetupState = ssBellOffset;
+  serialSetupState = ssBellDirection;
   Serial.print(F("Current bell offset: "));
   Serial.print(bellSecondsOffset);
   Serial.println(F(" seconds."));
-  Serial.println(F("Enter signed seconds (-3600 to 3600). Positive = clock behind real time; negative = clock ahead:"));
+  Serial.println(F("Is the clock time currently (A)head of the bell schedule or (B)ehind? Enter A or B:"));
 }
 
 bool parseSerialInteger(int32_t &value)
@@ -367,6 +369,21 @@ void processSerialLine()
     return;
   }
 
+  if (serialSetupState == ssBellDirection)
+  {
+    char direction = serialInputBuffer[0];
+    if (direction >= 'a' && direction <= 'z') direction -= ('a' - 'A');
+    if (serialInputBuffer[1] != '\0' || (direction != 'A' && direction != 'B'))
+    {
+      Serial.println(F("Enter A if the clock is ahead, or B if it is behind:"));
+      return;
+    }
+    bellClockDirection = direction;
+    serialSetupState = ssBellDelta;
+    Serial.println(F("By how many seconds? Enter an unsigned whole number:"));
+    return;
+  }
+
   valid = parseSerialInteger(value);
   switch (serialSetupState)
   {
@@ -426,26 +443,32 @@ void processSerialLine()
       }
       else Serial.println(F("Second must be from 0 to 59."));
       break;
-    case ssBellOffset:
-      if (valid && value >= -3600 && value <= 3600)
+    case ssBellDelta:
+      if (valid && value >= 0 && value <= 7200)
       {
-        pendingBellSecondsOffset = value;
+        int32_t adjustedOffset = bellSecondsOffset;
+        if (bellClockDirection == 'A') adjustedOffset -= value;
+        else adjustedOffset += value;
+        if (adjustedOffset < -3600 || adjustedOffset > 3600)
+        {
+          Serial.println(F("That adjustment would put the bell offset outside -3600 to 3600 seconds."));
+          Serial.println(F("Enter A if the clock is ahead, or B if it is behind:"));
+          serialSetupState = ssBellDirection;
+          return;
+        }
+        pendingBellSecondsOffset = adjustedOffset;
         serialSetupState = ssBellConfirm;
-        Serial.print(F("Save "));
+        Serial.print(F("Change bell offset to "));
         Serial.print(pendingBellSecondsOffset);
-        Serial.print(F(" seconds. The clock will run "));
-        if (pendingBellSecondsOffset > 0) Serial.print(F("behind"));
-        else if (pendingBellSecondsOffset < 0) Serial.print(F("ahead of"));
-        else Serial.print(F("with"));
-        Serial.println(F(" real time. Enter Y or N:"));
+        Serial.print(F(" seconds. Confirm with Y or N: "));
         return;
       }
-      else Serial.println(F("Offset must be from -3600 to 3600 seconds."));
+      else Serial.println(F("Enter an unsigned whole number of seconds (0-7200)."));
       break;
   }
   promptForTimeField();
-  if (serialSetupState == ssBellOffset)
-    Serial.println(F("Enter signed seconds (-3600 to 3600):"));
+  if (serialSetupState == ssBellDelta)
+    Serial.println(F("By how many seconds? Enter an unsigned whole number:"));
 }
 
 void handleSerialInput()

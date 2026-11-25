@@ -37,7 +37,7 @@ Wait for the menu. Type `T` to set the hardware clock or `B` to change the bell 
 
 For `T`, enter the year, month, day, hour, minute, and second in **GMT/UTC**, using a 24-hour hour value. Check the proposed date and time, then enter `Y` to apply it or `N` to cancel.
 
-For `B`, enter a signed offset from `-3600` to `3600` seconds. A positive value makes the displayed/schedule time run behind real time; a negative value makes it run ahead. Confirm with `Y` to save it, or `N` to cancel. The saved value remains after power is removed. After either change is confirmed or canceled, the clock returns to the setup menu and keeps displaying the time.
+For `B`, say whether the displayed clock is **A**head of the bell schedule or **B**ehind it, then enter the unsigned number of seconds. The clock adjusts the current bell offset by that delta and shows the resulting offset for confirmation. `Y` saves it; `N` cancels. The saved value remains after power is removed. After either change is confirmed or canceled, the clock returns to the setup menu and keeps displaying the time.
 
 When finished, exit `screen` with **Control-A**, then **K**, then **Y**. This closes the serial connection and releases the port.
 
